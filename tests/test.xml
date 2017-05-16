@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rbfile
+    xmlns="http://www.w3schools.com"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.w3schools.com rbf.xsd"
+>
+
+    <meta version="2017" description="Test file"/>
+
+	<fieldtype name="A" type="string"/>
+	<fieldtype name="N" type="decimal"/>    
+
+	<record name="LL" description="First record: latin Words" length="353">
+		<field name="ID" description="Record ID" length="2" type="A"/>
+        <field name="W1" description="Word 1" length="1" type="A"/>
+        <field name="W2" description="Word 2" length="2" type="A"/>
+        <field name="W3" description="Word 3" length="3" type="A"/>
+        <field name="W4" description="Word 4" length="4" type="A"/>
+        <field name="W5" description="Word 5" length="5" type="A"/>
+        <field name="W6" description="Word 6" length="6" type="A"/>
+        <field name="W7" description="Word 7" length="7" type="A"/>
+        <field name="W8" description="Word 8" length="8" type="A"/>
+        <field name="W9" description="Word 9" length="9" type="A"/>
+        <field name="W10" description="Word 10" length="10" type="A"/>
+        <field name="W11" description="Word 11" length="11" type="A"/>
+        <field name="W12" description="Word 12" length="12" type="A"/>
+        <field name="W13" description="Word 13" length="13" type="A"/>
+        <field name="W14" description="Word 14" length="14" type="A"/>
+        <field name="W15" description="Word 15" length="15" type="A"/>
+        <field name="W16" description="Word 16" length="16" type="A"/>
+        <field name="W17" description="Word 17" length="17" type="A"/>
+        <field name="W18" description="Word 18" length="18" type="A"/>
+        <field name="W19" description="Word 19" length="19" type="A"/>
+        <field name="W20" description="Word 20" length="20" type="A"/>
+        <field name="W21" description="Word 21" length="21" type="A"/>
+        <field name="W22" description="Word 22" length="22" type="A"/>
+        <field name="W23" description="Word 23" length="23" type="A"/>
+        <field name="W24" description="Word 24" length="24" type="A"/>
+        <field name="W25" description="Word 25" length="25" type="A"/>
+        <field name="W26" description="Word 26" length="26" type="A"/>        
+	</record>
+
+	<record name="NB" description="Second record: numbers" length="47">
+		<field name="ID" description="Record ID" length="2" type="N"/>
+        <field name="N1" description="Number 1" length="1" type="N"/>
+        <field name="N2" description="Number 2" length="2" type="N"/>
+        <field name="N3" description="Number 3" length="3" type="N"/>
+        <field name="N4" description="Number 4" length="4" type="N"/>
+        <field name="N5" description="Number 5" length="5" type="N"/>
+        <field name="N6" description="Number 6" length="6" type="N"/>
+        <field name="N7" description="Number 7" length="7" type="N"/>
+        <field name="N8" description="Number 8" length="8" type="N"/>
+        <field name="N9" description="Number 9" length="9" type="N"/>        
+	</record>
+
+	<record name="GL" description="Third record: greek letters" length="302">
+		<field name="ID" description="Record ID" length="2" type="A"/>
+        <field name="G1" description="Greek 1" length="1" type="A"/>
+        <field name="G2" description="Greek 2" length="2" type="A"/>
+        <field name="G3" description="Greek 3" length="3" type="A"/>
+        <field name="G4" description="Greek 4" length="4" type="A"/>
+        <field name="G5" description="Greek 5" length="5" type="A"/>
+        <field name="G6" description="Greek 6" length="6" type="A"/>
+        <field name="G7" description="Greek 7" length="7" type="A"/>
+        <field name="G8" description="Greek 8" length="8" type="A"/>
+        <field name="G9" description="Greek 9" length="9" type="A"/>
+        <field name="G10" description="Greek 10" length="10" type="A"/>
+        <field name="G11" description="Greek 11" length="11" type="A"/>
+        <field name="G12" description="Greek 12" length="12" type="A"/>
+        <field name="G13" description="Greek 13" length="13" type="A"/>
+        <field name="G14" description="Greek 14" length="14" type="A"/>
+        <field name="G15" description="Greek 15" length="15" type="A"/>
+        <field name="G16" description="Greek 16" length="16" type="A"/>
+        <field name="G17" description="Greek 17" length="17" type="A"/>
+        <field name="G18" description="Greek 18" length="18" type="A"/>
+        <field name="G19" description="Greek 19" length="19" type="A"/>
+        <field name="G20" description="Greek 20" length="20" type="A"/>
+        <field name="G21" description="Greek 21" length="21" type="A"/>
+        <field name="G22" description="Greek 22" length="22" type="A"/>
+        <field name="G23" description="Greek 23" length="23" type="A"/>
+        <field name="G24" description="Greek 24" length="24" type="A"/>     
+	</record>  
+
+	<record name="DP" description="Forth record: test field duplication" length="22">
+		<field name="ID" description="Record ID" length="2" type="A"/>
+        <field name="F5" description="Field 5" length="5" type="A"/>
+        <field name="F5" description="Field 5" length="5" type="A"/>
+        <field name="F5" description="Field 5" length="5" type="A"/>
+        <field name="F5" description="Field 5" length="5" type="A"/>                           
+	</record>         
+
+</rbfile>
