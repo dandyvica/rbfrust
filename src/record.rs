@@ -5,11 +5,11 @@
 //! ```rust
 //! use std::rc::Rc;
 //!
-//! use rbf::fieldtype::FieldType;
+//! use rbf::fieldtype::FieldDataType;
 //! use rbf::field::Field;
 //! use rbf::record::{ReadMode, UTF8Mode, Record};
 //!
-//! let ft1 = Rc::new(FieldType::new("I", "integer"));                  
+//! let ft1 = Rc::new(FieldDataType::new("I", "integer"));                  
 //! 
 //! let f1 = Field::new("FIELD1", "Description for field 1", &ft1, 10);
 //! let f2 = Field::new("FIELD2", "Description for field 2", &ft1, 10);
@@ -74,7 +74,7 @@ use std::ops::{Index, IndexMut};
 use std::slice::{Iter, IterMut};
 use std::marker::PhantomData;
 
-use field::Field;
+use field::{FieldCreationType, Field};
 
 /// This allows to define a way to read either pure Ascii data or UTF-8 data. Because the way
 /// of slicing is not the same, it's much more efficient using Ascii.
@@ -94,7 +94,7 @@ impl ReadMode for Record<AsciiMode> {
 
         // setting record value is setting value for all fields/records composing the record
         for f in &mut self.flist {
-            let r = f.lower_bound..f.upper_bound;
+            let r = f.lower_offset..f.upper_offset+1;
             f.set_value(&s[r]);
         } 
     }
@@ -108,7 +108,7 @@ impl ReadMode for Record<UTF8Mode> {
 
         // this is made for UTF-8 strings
         for f in &mut self.flist {
-            let fvalue: String = s.chars().skip(f.lower_bound).take(f.length).collect();
+            let fvalue: String = s.chars().skip(f.lower_offset).take(f.length).collect();
             f.set_value(&fvalue);
         }         
     }
@@ -122,7 +122,7 @@ impl ReadMode for Record<UTF8Mode> {
 /// ```rust,ignore
 /// // this builds a vector of record length if rec is a Record
 /// # #[macro_use] use rbf::record;
-/// # let rec = ::rbf::record::setup::set_up::<::rbf::record::AsciiMode>();
+/// # let rec = ::rbf::record::setup::set_up_by_length::<::rbf::record::AsciiMode>();
 /// let v = vector_of!(rec, length);
 /// ```
 #[macro_export]
@@ -185,15 +185,24 @@ impl<T> Record<T> {
         field.index = length;
 
         // offset at this moment is merely the length of record (starts at 0)
-        field.offset = self.calculated_length;
+        field.offset_from_origin = self.calculated_length;
 
-        // record is becoming longer
-        self.calculated_length += field.length;
+        // and adjust field bounds, depending on how the field was defined
+        match field.creation_type {
+            FieldCreationType::ByLength => {
+                // calculate bounds
+                field.lower_offset = field.offset_from_origin;
+                field.upper_offset = field.offset_from_origin + field.length - 1;
 
-        // and adjust field bounds
-        field.lower_bound = field.offset;
-        field.upper_bound = field.offset + field.length;  
-
+                // and new record length     
+                self.calculated_length += field.length;                      
+            },
+            FieldCreationType::ByOffset => {
+                // now length is the greastest bound value
+                self.calculated_length = field.upper_offset+1;              
+            }
+        };
+            
         // get last field having the same name (if any)
         match self.get(&field.name) {
             Some(ref mut v) => { field.multiplicity = v.pop().unwrap().multiplicity + 1; }
@@ -219,7 +228,7 @@ impl<T> Record<T> {
     /// # Exemple
     /// ```rust
     /// // only keep fields having length over 20 chars
-    /// # let rec = ::rbf::record::setup::set_up::<::rbf::record::AsciiMode>();    
+    /// # let rec = ::rbf::record::setup::set_up_by_length::<::rbf::record::AsciiMode>();    
     /// let fields = rec.filter(|f| f.length >20);
     /// ```      
     pub fn filter<F>(&self, pred: F) -> Option<Vec<&Field>>
@@ -268,13 +277,13 @@ impl<T> Record<T> {
 
         // setting record value is setting value for all fields/records composing the record
 /*        for f in &mut self.flist {
-            let r = f.lower_bound..f.upper_bound;
+            let r = f.lower_offset..f.upper_offset;
             f.set_value(&s[r]);
         } */
 
         // this is made for UTF-8 strings
         for f in &mut self.flist {
-            let fvalue: String = s.chars().skip(f.lower_bound).take(f.length).collect();
+            let fvalue: String = s.chars().skip(f.lower_offset).take(f.length).collect();
             f.set_value(&fvalue);
         }         
 
@@ -419,13 +428,13 @@ impl<T> Clone for Record<T> {
 pub mod setup {
     use std::rc::Rc;
 
-    use fieldtype::FieldType;
+    use fieldtype::FieldDataType;
     use field::Field;
     use record::Record;
 
-    // this fn sets up the relevant data for testing a record
-    pub fn set_up<T>() -> Record<T> {
-        let ft1 = Rc::new(FieldType::new("I", "integer"));                  
+    // this fn sets up the relevant data for testing a record, when fields are contiguous
+    pub fn set_up_by_length<T>() -> Record<T> {
+        let ft1 = Rc::new(FieldDataType::new("I", "integer"));                  
         
         let f1 = Field::new("FIELD1", "Description for field 1", &ft1, 10);
         let f2 = Field::new("FIELD2", "Description for field 2", &ft1, 10);
@@ -440,7 +449,26 @@ pub mod setup {
         rec.push(f4);
 
         rec        
-    }    
+    }
+
+    // this fn sets up the relevant data for testing a record, when fields are not-contiguous
+    pub fn set_up_by_offset<T>() -> Record<T> {
+        let ft1 = Rc::new(FieldDataType::new("I", "integer"));                  
+        
+        let f1 = Field::new_with_offset("FIELD1", "Description for field 1", &ft1, 5, 9);
+        let f2 = Field::new_with_offset("FIELD2", "Description for field 2", &ft1, 15, 19);
+        let f3 = Field::new_with_offset("FIELD3", "Description for field 3", &ft1, 30, 39);
+        let f4 = Field::new_with_offset("FIELD2", "Description for field 2", &ft1, 50, 60);        
+
+        let mut rec = Record::<T>::new("RECORD1", "Description for record 1", 0);
+
+        rec.push(f1);
+        rec.push(f2); 
+        rec.push(f3);
+        rec.push(f4);
+
+        rec        
+    }          
  
 }
 
@@ -450,10 +478,10 @@ mod tests {
     use record::{AsciiMode, UTF8Mode, ReadMode};
 
     #[test]
-    fn record_ascii() {
+    fn record_ascii_by_length() {
 
         // setup data
-        let mut rec = ::record::setup::set_up::<AsciiMode>();
+        let mut rec = ::record::setup::set_up_by_length::<AsciiMode>();
 
         assert_eq!(rec.calculated_length, 50);
         assert_eq!(rec.count(), 4);
@@ -504,10 +532,60 @@ mod tests {
     }
 
     #[test]
-    fn record_utf8 () {
+    fn record_ascii_by_offset() {
 
         // setup data
-        let mut rec = ::record::setup::set_up::<UTF8Mode>();     
+        let mut rec = ::record::setup::set_up_by_offset::<AsciiMode>();
+
+        assert_eq!(rec.calculated_length, 60);
+        assert_eq!(rec.count(), 4);
+
+        assert_eq!(vector_of!(rec, name), vec!["FIELD1", "FIELD2", "FIELD3", "FIELD2"]);  
+        assert_eq!(vector_of!(rec, description), vec!["Description for field 1", "Description for field 2", "Description for field 3", "Description for field 2"]);  
+        assert_eq!(vector_of!(rec, length), vec![5, 5, 10, 11]);  
+        
+
+        let s = "FIELD1".to_string();
+
+        assert!(rec.contains_field(&s)); 
+        assert_eq!(rec.contains_field("FOO"), false);     
+
+        assert!(rec.get("FIELD1").is_some());
+        assert!(rec.get("FOO").is_none());
+
+        // line has exactly the right length in chars
+        let s1 = "    AAAAA     BBBBB          CCCCCCCCCC          DDDDDDDDDDD";
+        rec.set_value(&s1);
+        assert_eq!(rec[0].value(), "AAAAA");
+        assert_eq!(rec[1].value(), "BBBBB"); 
+        assert_eq!(rec[2].value(), "CCCCCCCCCC");    
+        assert_eq!(rec[3].value(), "DDDDDDDDDDD");
+        assert_eq!(vector_of!(rec, raw_value), vec!["AAAAA", "BBBBB", "CCCCCCCCCC", "DDDDDDDDDDD"]);
+        
+    }    
+
+    #[test]
+    fn record_utf8_by_offset() {
+
+        // setup data
+        let mut rec = ::record::setup::set_up_by_offset::<UTF8Mode>();    
+
+        // line has exactly the right length in chars
+        let s1 = "    ααααα     βββββ          γγγγγγγγγγ          δδδδδδδδδδδ";
+        rec.set_value(&s1);
+        assert_eq!(rec[0].value(), "ααααα");
+        assert_eq!(rec[1].value(), "βββββ"); 
+        assert_eq!(rec[2].value(), "γγγγγγγγγγ");    
+        assert_eq!(rec[3].value(), "δδδδδδδδδδδ");
+        assert_eq!(vector_of!(rec, raw_value), vec!["ααααα", "βββββ", "γγγγγγγγγγ", "δδδδδδδδδδδ"]);
+
+    }
+
+    #[test]
+    fn record_utf8_by_length() {
+
+        // setup data
+        let mut rec = ::record::setup::set_up_by_length::<UTF8Mode>();     
 
         let s5 = "ααααααααααββββββββββγγγγγγγγγγγγγγγγγγγγδδδδδδδδδδ";
         rec.set_value(&s5);  
@@ -516,15 +594,14 @@ mod tests {
         assert_eq!(rec[2].value(), "γγγγγγγγγγγγγγγγγγγγ");    
         assert_eq!(rec[3].value(), "δδδδδδδδδδ");  
         assert_eq!(vector_of!(rec, raw_value), vec!["αααααααααα", "ββββββββββ", "γγγγγγγγγγγγγγγγγγγγ", "δδδδδδδδδδ"]);
-
-    }
+    }    
 
     #[test]
     #[should_panic]
     #[allow(unused_variables)]
     fn record_panic() {
         // setup data
-        let rec = ::record::setup::set_up::<AsciiMode>();
+        let rec = ::record::setup::set_up_by_length::<AsciiMode>();
 
         // this should panic
         let v1 = rec.get_value("FOO");

@@ -89,9 +89,15 @@ pub struct Reader<T> {
     /// buffer use when reading the file line by line
     bufreader: BufReader<File>,
     /// the line read from file
-    line: String,
+    pub line: String,
     /// lazyness when reading
-    lazyness: ReaderLazyness,
+    pub lazyness: ReaderLazyness,
+    /// input file size
+    pub file_size: u64,
+    /// number of chars read when reading a line
+    pub chars_read: usize,
+    /// number of lines read so far
+    pub nblines_read: u64,
 }
 
 impl<T> Reader<T> {
@@ -119,6 +125,9 @@ impl<T> Reader<T> {
             Err(why) => panic!("couldn't open {}: {}", rbf_file, why.description()),            
         };
 
+        // get file size
+        let metadata = ::std::fs::metadata(&rbf_file).unwrap();
+
         Reader {
             rbf_file: rbf_file.to_string(),
             layout: layout,
@@ -126,6 +135,9 @@ impl<T> Reader<T> {
             bufreader: bufreader,
             line: String::new(),
             lazyness: ReaderLazyness::Lazy,
+            file_size: metadata.len(),
+            chars_read: 0,
+            nblines_read: 0,
         }
     }
 
@@ -155,7 +167,12 @@ impl<T> Reader<T> {
             // read one line of text
             match self.bufreader.read_line(&mut self.line) {
                 // No bytes read? This is EOF and we must end the iteration
-                Ok(chars_read) => if chars_read == 0 { return None; },
+                Ok(chars_read) => if chars_read == 0 { 
+                        return None; 
+                    } else { 
+                        self.chars_read = chars_read;
+                        self.nblines_read += 1; 
+                    },
                 // error reading bytes
                 Err(why) => panic!("error {} when reading file {}", why.description(), self.rbf_file),
             }; 

@@ -11,12 +11,12 @@
 //!
 //! # Examples
 //! ```rust
-//! use rbf::fieldtype::{BaseType, FieldType};
+//! use rbf::fieldtype::{BaseDataType, FieldDataType};
 //!
-//! let ft = FieldType::new("I", "integer");
+//! let ft = FieldDataType::new("I", "integer");
 //!
 //! assert_eq!(&ft.id, "I");
-//! assert_eq!(ft.base_type, BaseType::Integer); 
+//! assert_eq!(ft.base_data_type, BaseDataType::Integer); 
 //! ```
 
 use std::fmt;
@@ -27,23 +27,23 @@ const POSSIBLE_TYPES: [&str; 5] = ["string", "decimal", "integer", "date", "time
 #[derive(Debug)]
 #[derive(PartialEq)]
 /// This is the list of all possible core field types.
-pub enum BaseType {
+pub enum BaseDataType {
     String,
     Decimal,
     Integer,
-    Date,
-    Time
+    Date{ date_format: String },
+    Time{ time_format: String },
 }
 
 /// Convenient conversion from a string ref.
-impl<'a> From<&'a str> for BaseType {
-    fn from(original: &'a str) -> BaseType {
+impl<'a> From<&'a str> for BaseDataType {
+    fn from(original: &'a str) -> BaseDataType {
         match original {
-            "string" => BaseType::String,
-            "decimal" =>  BaseType::Decimal,
-            "integer" => BaseType::Integer,
-            "date" => BaseType::Date,
-            "time" => BaseType::Time,
+            "string" => BaseDataType::String,
+            "decimal" =>  BaseDataType::Decimal,
+            "integer" => BaseDataType::Integer,
+            "date" => BaseDataType::Date{ date_format: "%D%m%s".to_string() },
+            "time" => BaseDataType::Time{ time_format: "%H%M%S".to_string() },
             unknown_type @ _ => panic!("<{}> is not allowed as a field type", unknown_type)
         }
     }
@@ -51,29 +51,29 @@ impl<'a> From<&'a str> for BaseType {
 
 
 // implement display trait
-impl fmt::Display for BaseType {
+impl fmt::Display for BaseDataType {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         let printable = match *self {
-            BaseType::String => "String",
-            BaseType::Decimal => "Decimal",
-            BaseType::Integer => "Integer",
-            BaseType::Date => "Date",
-            BaseType::Time => "Time",                                    
+            BaseDataType::String => "String".to_string(),
+            BaseDataType::Decimal => "Decimal".to_string(),
+            BaseDataType::Integer => "Integer".to_string(),
+            BaseDataType::Date{ ref date_format } => format!("Date {{ {} }}", *date_format),
+            BaseDataType::Time{ ref time_format } => format!("Time {{ {} }}", *time_format),
         };
         write!(f, "{}", printable)
     }
 }
 
 #[derive(Debug)]
-pub struct FieldType {
+pub struct FieldDataType {
     /// Nickname for the field type
     pub id: String,
     /// Base type (which is only limited to a set a values)
-    pub base_type: BaseType,
+    pub base_data_type: BaseDataType,
 }
 
-impl FieldType {
-    /// Creates a new `FieldType` with an ID (a kind of nickname to refer to) and
+impl FieldDataType {
+    /// Creates a new `FieldDataType` with an ID (a kind of nickname to refer to) and
     /// a type which should in the list: string, decimal, integer, date or time.
     ///
     /// # Arguments
@@ -81,32 +81,51 @@ impl FieldType {
     /// * `id` - nickname for the field type
     /// * `string_type`: base underlying type
     ///    
-    pub fn new(id: &str, string_type: &str) -> FieldType {
+    pub fn new(id: &str, string_type: &str) -> FieldDataType {
         // first test arguments: non-sense to deal with empty data
         if id.is_empty() {
-            panic!("Cannot create FieldType with empty id!");
+            panic!("Cannot create FieldDataType with empty id!");
         }
         if string_type.is_empty() {
-            panic!("Cannot create FieldType with an empty string type!");
+            panic!("Cannot create FieldDataType with an empty string type!");
         }
         if !POSSIBLE_TYPES.contains(&string_type) {
             panic!("<{}> is not allowed as a field type", string_type);
         }
 
         // according to string type, create corresponding type
-        FieldType {
+        FieldDataType {
             id: id.to_string(), 
-            base_type: BaseType::from(string_type)
+            base_data_type: BaseDataType::from(string_type)
         }
     }
 
+    /// Sets the date format for conversion to time structs.
+    ///
+    /// # Arguments
+    ///
+    /// * `date_format` - format according to strftime() call
+    /// 
+    pub fn set_date_format(&mut self, date_format: &str) {
+        self.base_data_type = BaseDataType::Date { date_format : date_format.to_string() };
+    }  
+
+    /// Sets the time format for conversion to time structs.
+    ///
+    /// # Arguments
+    ///
+    /// * `time_format` - format according to strftime() call
+    /// 
+    pub fn set_time_format(&mut self, time_format: &str) {
+        self.base_data_type = BaseDataType::Time { time_format : time_format.to_string() };
+    } 
 }
 
 
 // implement display trait
-impl fmt::Display for FieldType {
+impl fmt::Display for FieldDataType {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "id: <{}>, base type: <{}>", self.id, self.base_type)
+        write!(f, "id: <{}>, base type: <{}>", self.id, self.base_data_type)
     }
 }
 
@@ -114,19 +133,42 @@ impl fmt::Display for FieldType {
 #[cfg(test)]
 mod tests {
 
-    use fieldtype::{BaseType, FieldType};
+    use fieldtype::{BaseDataType, FieldDataType};
 
     #[test]
     #[should_panic]
     #[allow(unused_variables)]
     fn unknown_fieldtype() {
-        let ft = FieldType::new("C", "complex");
+        let ft = FieldDataType::new("C", "complex");
     }
 
     #[test]
-    fn fieldtype_1() {
-        let ft = FieldType::new("I", "integer");
+    fn fieldtype_simple() {
+        let ft = FieldDataType::new("I", "integer");
         assert_eq!(&ft.id, "I");
-        assert_eq!(ft.base_type, BaseType::Integer);    
+        assert_eq!(ft.base_data_type, BaseDataType::Integer);    
     }
+
+    #[test]
+    fn fieldtype_all() {
+        let ft = FieldDataType::new("S", "string");
+        assert_eq!(&ft.id, "S");
+        assert_eq!(ft.base_data_type, BaseDataType::String);
+
+        let ft = FieldDataType::new("N", "decimal");
+        assert_eq!(&ft.id, "N");
+        assert_eq!(ft.base_data_type, BaseDataType::Decimal);  
+
+        let ft = FieldDataType::new("I", "integer");
+        assert_eq!(&ft.id, "I");
+        assert_eq!(ft.base_data_type, BaseDataType::Integer);  
+
+        let ft = FieldDataType::new("D", "date");
+        assert_eq!(&ft.id, "D");
+        assert_eq!(ft.base_data_type, BaseDataType::Date{ date_format: "%D%m%s".to_string() });  
+
+        let ft = FieldDataType::new("T", "time");
+        assert_eq!(&ft.id, "T");
+        assert_eq!(ft.base_data_type, BaseDataType::Time{ time_format: "%H%M%S".to_string() });                                      
+    }    
 }  

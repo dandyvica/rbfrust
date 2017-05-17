@@ -38,7 +38,7 @@ use std::rc::Rc;
 
 use xml::reader::{EventReader, XmlEvent};
 
-use fieldtype::FieldType;
+use fieldtype::FieldDataType;
 use field::Field;
 use record::Record;
 
@@ -105,7 +105,7 @@ impl<T> Layout<T> {
         };
 
         // define hash to hold fieldtypes
-        let mut ftypes: HashMap<String, Rc<FieldType>> = HashMap::new();
+        let mut ftypes: HashMap<String, Rc<FieldDataType>> = HashMap::new();
 
         //let mut rec_list: Vec<Record> = Vec::new();
         let mut rec_map: HashMap<String, Record<T>> = HashMap::new();
@@ -161,7 +161,7 @@ impl<T> Layout<T> {
                             let ft_type = attr.get("type").unwrap();                           
                             ftypes.insert(
                                 ft_name.to_string(), 
-                                Rc::new(FieldType::new(ft_name, ft_type))
+                                Rc::new(FieldDataType::new(ft_name, ft_type))
                             );
                         }                     
                         "record" => {

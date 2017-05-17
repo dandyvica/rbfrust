@@ -9,10 +9,10 @@
 //! # Examples
 //! ```rust
 //! use std::rc::Rc;
-//! use rbf::fieldtype::FieldType;
+//! use rbf::fieldtype::FieldDataType;
 //! use rbf::field::Field;
 //!
-//! let ft = Rc::new(FieldType::new("I", "integer"));
+//! let ft = Rc::new(FieldDataType::new("I", "integer"));
 //! let mut f1 = Field::new("F1", "Description for field 1", &ft, 10);
 //! let mut f2 = Field::new("F2", "Description for field 2", &ft, 10);        
 //! 
@@ -31,7 +31,7 @@ use std::fmt;
 use std::rc::Rc;
 use std::cmp::max;
 
-use fieldtype::FieldType;
+use fieldtype::FieldDataType;
 
 // useful macro print out data enclosed by HTML tag
 #[doc(hidden)]
@@ -46,6 +46,13 @@ macro_rules! html_tag {
     }}
 }
 
+/// Holds the way a Field is defined: by giving its length or its offsets
+#[derive(Debug)]
+pub enum FieldCreationType {
+    ByLength,
+    ByOffset,
+}
+
 #[derive(Debug)]
 pub struct Field {
     /// field name
@@ -55,38 +62,40 @@ pub struct Field {
     /// field length in chars
     pub length: usize,    
     /// field type of this field, in chars (but not in bytes, because of UTF-8 strings)
-    pub ftype: Rc<FieldType>,
+    pub ftype: Rc<FieldDataType>,
     /// field value, copied as-is
     pub raw_value: String,
     /// blank-stripped field value
     pub str_value: String,
     /// offset in chars of this field within its parent record
-    pub offset: usize,
+    pub offset_from_origin: usize,
     /// index of this field within its record
     pub index: usize,
     /// first position (in chars) from the beginning of the record
-    pub lower_bound: usize,
+    pub lower_offset: usize,
     /// last position (in chars) of the field within its record
-    pub upper_bound: usize,
+    pub upper_offset: usize,
     /// in case of a record having the same field name several times, this tracks down the field number
     pub multiplicity: usize,
     /// for display purpose (= maximum of field description and length)
     pub cell_size: usize,
+    /// holds the way a Field is created: by length or by offset
+    pub creation_type: FieldCreationType,
 }
 
 impl Field {
-    /// Creates a new field.
+    /// Creates a new field with length.
     ///
     /// # Arguments
     ///
     /// * `name` - name of the field
     /// * `description`: description of the field
-    /// * `FieldType` fieldtype: format of the field (type of data found in the field)
+    /// * `FieldDataType` fieldtype: format of the field (type of data found in the field)
     /// * `length`: number of chars of the field
     ///
     /// # Panics
     /// If `name` is empty or `length` is 0
-    pub fn new(name: &str, description: &str, ftype: &Rc<FieldType>, length: usize) -> Field {
+    pub fn new(name: &str, description: &str, ftype: &Rc<FieldDataType>, length: usize) -> Field {
         // test arguments: non-sense to deal with empty data
         if name.is_empty() {
             panic!("Cannot create Field with an empty name!");
@@ -103,17 +112,30 @@ impl Field {
             ftype: ftype.clone(), 
             raw_value: String::new(),
             str_value: String::new(),
-            offset: 0,
+            offset_from_origin: 0,
             index: 0,
-            lower_bound: 0,
-            upper_bound: 0,
+            lower_offset: 0,
+            upper_offset: 0,
             multiplicity: 0,
             cell_size: max(length, name.len()),
+            creation_type: FieldCreationType::ByLength,
         }
 
     }
 
-    pub fn new_with_offset(name: &str, description: &str, ftype: &Rc<FieldType>, 
+    /// Creates a new field with lower & upper bounds.
+    ///
+    /// # Arguments
+    ///
+    /// * `name` - name of the field
+    /// * `description`: description of the field
+    /// * `FieldDataType` fieldtype: format of the field (type of data found in the field)
+    /// * `lower_offset`: lower bound of the field in the record
+    /// * `upper_offset`: upper bound of the field in the record
+    ///
+    /// # Panics
+    /// If `name` is empty or `lower_offset > upper_offset`
+    pub fn new_with_offset(name: &str, description: &str, ftype: &Rc<FieldDataType>, 
         lower_offset: usize, upper_offset: usize) -> Field {
         // test arguments: non-sense to deal with empty data
         if name.is_empty() {
@@ -134,12 +156,13 @@ impl Field {
             ftype: ftype.clone(), 
             raw_value: String::new(),
             str_value: String::new(),
-            offset: 0,
+            offset_from_origin: 0,
             index: 0,
-            lower_bound: lower_offset,
-            upper_bound: upper_offset,
+            lower_offset: lower_offset-1, // internally kept at origin 0
+            upper_offset: upper_offset-1, // internally kept at origin 0
             multiplicity: 0,
             cell_size: max(length, name.len()),
+            creation_type: FieldCreationType::ByOffset,         
         }
 
     }
@@ -164,7 +187,7 @@ impl Field {
     pub fn as_html(&self) {
         println!("<tr>");
         println!("{}", html_tag!("td", self, 
-            name, description, length, ftype, raw_value, str_value, offset, index, lower_bound, upper_bound));
+            name, description, length, ftype, raw_value, str_value, offset_from_origin, index, lower_offset, upper_offset));
         println!("</tr>");       
     }
 }
@@ -174,9 +197,9 @@ impl fmt::Display for Field {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(
             f, 
-            "name: <{}>, description: <{}>, length: <{}>, field type: {}, raw_value=<{}>, str_value=<{}>, offset=<{}>, index=<{}>, lower_bound=<{}>, upper_bound=<{}>", 
+            "name: <{}>, description: <{}>, length: <{}>, field type: {}, raw_value=<{}>, str_value=<{}>, offset_from_origin=<{}>, index=<{}>, lower_offset=<{}>, upper_offset=<{}>", 
             self.name, self.description, self.length, self.ftype, self.raw_value, self.str_value, 
-            self.offset, self.index, self.lower_bound, self.upper_bound
+            self.offset_from_origin, self.index, self.lower_offset, self.upper_offset
         )
     }
 }
@@ -189,10 +212,10 @@ impl Clone for Field {
         // copy other fields which can be potentially already set
         cloned.raw_value = self.raw_value.clone();
         cloned.str_value = self.str_value.clone();      
-        cloned.offset = self.offset;  
+        cloned.offset_from_origin = self.offset_from_origin;  
         cloned.index = self.index; 
-        cloned.lower_bound = self.lower_bound;
-        cloned.upper_bound = self.upper_bound;  
+        cloned.lower_offset = self.lower_offset;
+        cloned.upper_offset = self.upper_offset;  
         cloned.multiplicity = self.multiplicity;                                          
 
         cloned
@@ -203,13 +226,13 @@ impl Clone for Field {
 mod tests {
     use std::rc::Rc;
 
-    use fieldtype::FieldType;
+    use fieldtype::FieldDataType;
     use field::Field;
 
     #[test]
     fn field_cons_offset() {
-        let ft = Rc::new(FieldType::new("I", "integer"));
-        let mut f1 = Field::new_with_offset("F1", "Description for field 1", &ft, 5, 10);     
+        let ft = Rc::new(FieldDataType::new("I", "integer"));
+        let f1 = Field::new_with_offset("F1", "Description for field 1", &ft, 5, 10);     
         
         assert_eq!(&f1.name, "F1");
         assert_eq!(&f1.description, "Description for field 1");    
@@ -218,7 +241,7 @@ mod tests {
 
     #[test]
     fn field_cons_with_length() {
-        let ft = Rc::new(FieldType::new("I", "integer"));
+        let ft = Rc::new(FieldDataType::new("I", "integer"));
         let mut f1 = Field::new("F1", "Description for field 1", &ft, 10);     
         
         assert_eq!(&f1.name, "F1");
@@ -241,7 +264,7 @@ mod tests {
     #[should_panic]
     #[allow(unused_variables)]    
     fn field_badcons() {
-        let ft = Rc::new(FieldType::new("I", "integer"));
+        let ft = Rc::new(FieldDataType::new("I", "integer"));
 
         let f1 = Field::new("F1", "Description for field 1", &ft, 0); 
         let f2 = Field::new("", "Description for field 1", &ft, 10);            
