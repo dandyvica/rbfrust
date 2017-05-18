@@ -1,9 +1,11 @@
 import string
 import random
+import sys
 
 # create fake data file to test reader
-recs = ["LL", "NB", "DP", "GL"]
-nb_lines = 1000
+#recs = ["LL", "NB", "DP", "GL"]
+recs = ["LL", "NB", "DP"]
+nb_lines = int(sys.argv[1])
 
 # create records for each record ID
 rec = {}

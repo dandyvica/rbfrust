@@ -15,7 +15,12 @@ name = "count_recs"
 [[example]]
 name = "just_read"
 
+[[bench]]
+name = "read_bench"
+harness = false
+
 [dependencies]
 xml-rs = "0.4.1"
 #regex = "0.2"
+bencher = "0.1.2"
 

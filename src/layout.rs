@@ -28,7 +28,6 @@
 //!      assert!(recname.len() >= 2);
 //!  }
 //! ```
-
 use std::env;
 use std::fs::File;
 use std::error::Error;
@@ -316,17 +315,26 @@ impl<'a, T> IntoIterator for &'a Layout<T> {
     }
 }
 
+// module to setup test data for layout
+pub mod setup {
+
+    use record::AsciiMode;    
+    use layout::Layout;
+    
+    pub fn layout_load_layout_ascii() -> Layout<AsciiMode> {
+        // load our layout
+        Layout::<AsciiMode>::new("./tests/test.xml")
+    }  
+
+}
+
 #[cfg(test)]
 mod tests {
 
-    use record::AsciiMode;
-    use layout::Layout; 
-   
-
     #[test]
-    fn layout_1() {
+    fn layout_ascii() {
         // load our layout
-        let layout = Layout::<AsciiMode>::new("./tests/test.xml");
+        let layout = ::layout::setup::layout_load_layout_ascii();
 
         // is it a valid XML layout ?
         assert!(layout.is_valid().0);
@@ -350,5 +358,10 @@ mod tests {
             assert!(recname.len() >= 2);
             assert!(rec.name.len() <= 3);        
         }        
-    }       
+    }
+
+/*    #[bench]
+    fn bench_load_layout(b: &mut Bencher) {
+        b.iter(|| ::layout::setup::layout_load_layout_ascii());
+    }  */     
 }

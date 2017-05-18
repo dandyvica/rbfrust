@@ -332,7 +332,7 @@ impl<T> Record<T> {
         f.value()
     } 
 
-    /// Adjust value according to record length   
+    /// Adjusts value according to record length.  
     fn adjust_value(&self, value: &str) -> String {
         // if shorter, left-pad with blanks
         if value.len() < self.calculated_length {

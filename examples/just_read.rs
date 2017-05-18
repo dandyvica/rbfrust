@@ -35,5 +35,8 @@ fn main () {
     } 
 
     // print out results
-    println!("Elapsed time: {}.{} secs", now.elapsed().as_secs(), now.elapsed().subsec_nanos());
+    let secs = now.elapsed().as_secs();
+    println!("Elapsed time: {}.{} secs for {} lines read", 
+            now.elapsed().as_secs(), now.elapsed().subsec_nanos(), reader.nblines_read);
+    println!("Average: {} per lines/s", reader.nblines_read/secs);
 }
