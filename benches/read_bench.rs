@@ -1,58 +1,72 @@
-use std::env;
-
 #[macro_use]
 extern crate bencher;
 use bencher::Bencher;
 
 extern crate rbf;
-use rbf::record::{AsciiMode};
-use rbf::layout::{Layout, setup};
+use rbf::record::{AsciiMode, UTF8Mode, ReadMode};
+use rbf::layout::{Layout};
 use rbf::reader::Reader;
 
+// how long is it to read a Layout
 fn load_layout(bench: &mut Bencher) {
     bench.iter(|| {
-        ::rbf::layout::setup::layout_load_layout_ascii()
+        rbf::layout::setup::layout_load_layout_ascii()
     })
 }
 
-fn read_file(bench: &mut Bencher) {
+// try to bench record set_value
+fn set_value(bench: &mut Bencher) {
+    let mut rec = rbf::record::setup::set_up_by_offset::<AsciiMode>();
     bench.iter(|| {
-        // load our layout
-        let layout = Layout::<AsciiMode>::new("./tests/test.xml");
-
-        // create reader
-        fn mapper(x: &str) -> &str { &x[0..2] };
-        let mut reader = Reader::<AsciiMode>::new("./tests/test_ascii.data", layout, mapper);          
-
-        while let Some(rec) = reader.next() { 
-            let fname = rec.name.len();
-        }             
+        rec.set_value("AAAAAAAAAABBBBBBBBBBCCCCCCCCCCCCCCCCCCCCDDDDDDDDDD")
     })
 }
 
-// get file name from env variable to get the right file
-fn read_big_file(bench: &mut Bencher) {
+// try to bench record set_value
+fn set_value_huge_100(bench: &mut Bencher) {
+    let mut rec = rbf::record::setup::set_up_by_length_huge::<AsciiMode>(100);
+    let s = "A".to_string().repeat(1000);
+
     bench.iter(|| {
-        // get file name
-        let key = match env::var_os("RBF_FILE") {
-            Some(val) => val,
-            None => panic!("RBF_FILE is not defined in the environment."),
-        };
-        let rbf_file = key.into_string().unwrap();
-
-        // load our layout
-        let layout = Layout::<AsciiMode>::new("./tests/test.xml");
-
-        // create reader
-        fn mapper(x: &str) -> &str { &x[0..2] };
-        let mut reader = Reader::<AsciiMode>::new(&rbf_file, layout, mapper);
-
-        while let Some(rec) = reader.next() { 
-            let fname = rec.name.len();
-        }
-             
+        rec.set_value(&s)
     })
 }
 
-benchmark_group!(benches, load_layout, read_file, read_big_file);
+// try to bench record set_value
+fn set_value_huge_1000(bench: &mut Bencher) {
+    let mut rec = rbf::record::setup::set_up_by_length_huge::<AsciiMode>(1000);
+    let s = "A".to_string().repeat(10000);
+
+    bench.iter(|| {
+        rec.set_value(&s)
+    })
+}
+
+// try to bench record set_value
+fn set_value_huge_utf8_1000(bench: &mut Bencher) {
+    let mut rec = rbf::record::setup::set_up_by_length_huge::<UTF8Mode>(1000);
+    let s = "α".to_string().repeat(10000);
+
+    bench.iter(|| {
+        rec.set_value(&s)
+    })
+}
+
+fn next_record_id(bench: &mut Bencher) {
+    // load our layout
+    let layout = Layout::<AsciiMode>::new("./tests/test.xml");
+
+    // create reader
+    fn mapper(x: &str) -> &str { &x[0..2] };
+    let mut reader = Reader::<AsciiMode>::new("./tests/test_ascii.data", layout, mapper); 
+
+
+    bench.iter(|| {
+        reader.next_record_id()             
+    })
+}
+
+
+benchmark_group!(benches, load_layout, set_value, set_value_huge_100, 
+    set_value_huge_1000, set_value_huge_utf8_1000, next_record_id);
 benchmark_main!(benches);

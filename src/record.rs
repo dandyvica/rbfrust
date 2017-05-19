@@ -342,7 +342,6 @@ impl<T> Record<T> {
             value.to_string()
         }
     }
-
 }
 
 // implement debug trait
@@ -468,7 +467,21 @@ pub mod setup {
         rec.push(f4);
 
         rec        
-    }          
+    } 
+
+    // this fn sets up the relevant data for testing a hug record
+    #[allow(unused_variables)]
+    pub fn set_up_by_length_huge<T>(size: usize) -> Record<T> {
+        let ft1 = Rc::new(FieldDataType::new("I", "integer")); 
+        let mut rec = Record::<T>::new("RECORD1", "Description for record 1", 0);
+
+        for i in 0..size {
+            let f = Field::new("FIELD1", "Description for field 1", &ft1, 10);
+            rec.push(f);
+        }                 
+
+        rec        
+    }              
  
 }
 
