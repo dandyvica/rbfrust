@@ -15,6 +15,9 @@ name = "count_recs"
 [[example]]
 name = "just_read"
 
+[[example]]
+name = "just_display"
+
 [[bench]]
 name = "read_bench"
 harness = false

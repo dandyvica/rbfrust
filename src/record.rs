@@ -344,6 +344,14 @@ impl<T> Record<T> {
     }
 }
 
+/// Lists all field name and values from a Record.
+impl<T> fmt::Display for Record<T> {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        let s: Vec<_> = self.flist.iter().map(|f| format!("{}=\"{}\"", f.name, f.value())).collect();
+        write!(f, "({})", s.join(","))
+    }
+}
+
 // implement debug trait
 impl<T> fmt::Debug for Record<T> {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
