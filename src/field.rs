@@ -13,8 +13,8 @@
 //! use rbf::field::Field;
 //!
 //! let ft = Rc::new(FieldDataType::new("I", "integer"));
-//! let mut f1 = Field::new("F1", "Description for field 1", &ft, 10);
-//! let mut f2 = Field::new("F2", "Description for field 2", &ft, 10);        
+//! let mut f1 = Field::from_length("F1", "Description for field 1", &ft, 10);
+//! let mut f2 = Field::from_length("F2", "Description for field 2", &ft, 10);        
 //! 
 //! assert_eq!(&f1.name, "F1");
 //! assert_eq!(&f1.description, "Description for field 1");    
@@ -95,7 +95,7 @@ impl Field {
     ///
     /// # Panics
     /// If `name` is empty or `length` is 0
-    pub fn new(name: &str, description: &str, ftype: &Rc<FieldDataType>, length: usize) -> Field {
+    pub fn from_length(name: &str, description: &str, ftype: &Rc<FieldDataType>, length: usize) -> Field {
         // test arguments: non-sense to deal with empty data
         if name.is_empty() {
             panic!("Cannot create Field with an empty name!");
@@ -135,7 +135,7 @@ impl Field {
     ///
     /// # Panics
     /// If `name` is empty or `lower_offset > upper_offset`
-    pub fn new_with_offset(name: &str, description: &str, ftype: &Rc<FieldDataType>, 
+    pub fn from_offset(name: &str, description: &str, ftype: &Rc<FieldDataType>, 
         lower_offset: usize, upper_offset: usize) -> Field {
         // test arguments: non-sense to deal with empty data
         if name.is_empty() {
@@ -207,7 +207,7 @@ impl fmt::Display for Field {
 // implement clone
 impl Clone for Field {
     fn clone(&self) -> Field {
-        let mut cloned = Field::new(&self.name, &self.description, &self.ftype, self.length);
+        let mut cloned = Field::from_length(&self.name, &self.description, &self.ftype, self.length);
 
         // copy other fields which can be potentially already set
         cloned.raw_value = self.raw_value.clone();
@@ -232,7 +232,7 @@ mod tests {
     #[test]
     fn field_cons_offset() {
         let ft = Rc::new(FieldDataType::new("I", "integer"));
-        let f1 = Field::new_with_offset("F1", "Description for field 1", &ft, 5, 10);     
+        let f1 = Field::from_offset("F1", "Description for field 1", &ft, 5, 10);     
         
         assert_eq!(&f1.name, "F1");
         assert_eq!(&f1.description, "Description for field 1");    
@@ -242,7 +242,7 @@ mod tests {
     #[test]
     fn field_cons_with_length() {
         let ft = Rc::new(FieldDataType::new("I", "integer"));
-        let mut f1 = Field::new("F1", "Description for field 1", &ft, 10);     
+        let mut f1 = Field::from_length("F1", "Description for field 1", &ft, 10);     
         
         assert_eq!(&f1.name, "F1");
         assert_eq!(&f1.description, "Description for field 1");    
@@ -266,7 +266,7 @@ mod tests {
     fn field_badcons() {
         let ft = Rc::new(FieldDataType::new("I", "integer"));
 
-        let f1 = Field::new("F1", "Description for field 1", &ft, 0); 
-        let f2 = Field::new("", "Description for field 1", &ft, 10);            
+        let f1 = Field::from_length("F1", "Description for field 1", &ft, 0); 
+        let f2 = Field::from_length("", "Description for field 1", &ft, 10);            
     }      
 }

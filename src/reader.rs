@@ -234,6 +234,8 @@ impl<T> Reader<T> {
 
         // set value for this record
         let rec = self.layout.get_mut(&rec_id).unwrap();
+
+        // set all field values
         rec.set_value(&self.line);
 
         // return our record

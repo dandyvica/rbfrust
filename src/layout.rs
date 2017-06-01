@@ -217,7 +217,7 @@ impl<T> Layout<T> {
 
                                 // add Field into the last created record
                                 rec_map.get_mut(&last_rec_name).unwrap().push(
-                                    Field::new_with_offset(
+                                    Field::from_offset(
                                         f_name, f_desc, &ft, f_lower_offset, f_upper_offset
                                     )                               
                                 );                                                  
@@ -226,7 +226,7 @@ impl<T> Layout<T> {
                             else {
                                 // add Field into the last created record
                                 rec_map.get_mut(&last_rec_name).unwrap().push(
-                                    Field::new(
+                                    Field::from_length(
                                         f_name, f_desc, &ft, f_length
                                     )                               
                                 );

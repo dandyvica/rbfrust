@@ -11,10 +11,10 @@
 //!
 //! let ft1 = Rc::new(FieldDataType::new("I", "integer"));                  
 //! 
-//! let f1 = Field::new("FIELD1", "Description for field 1", &ft1, 10);
-//! let f2 = Field::new("FIELD2", "Description for field 2", &ft1, 10);
-//! let f3 = Field::new("FIELD3", "Description for field 3", &ft1, 20);
-//! let f4 = Field::new("FIELD2", "Description for field 2", &ft1, 10);        
+//! let f1 = Field::from_length("FIELD1", "Description for field 1", &ft1, 10);
+//! let f2 = Field::from_length("FIELD2", "Description for field 2", &ft1, 10);
+//! let f3 = Field::from_length("FIELD3", "Description for field 3", &ft1, 20);
+//! let f4 = Field::from_length("FIELD2", "Description for field 2", &ft1, 10);        
 //!
 //! let mut rec = Record::<UTF8Mode>::new("RECORD1", "Description for record 1", 20);
 //!
@@ -73,6 +73,7 @@ use std::fmt;
 use std::ops::{Index, IndexMut};
 use std::slice::{Iter, IterMut};
 use std::marker::PhantomData;
+use std::borrow::Cow;
 
 use field::{FieldCreationType, Field};
 
@@ -90,7 +91,7 @@ pub trait ReadMode {
 impl ReadMode for Record<AsciiMode> {
     /// Sets the record value (which is equivalent to setting all fields).
     fn set_value(&mut self, value: &str) {
-        let s = self.adjust_value(value);
+        let s = self.adjust_value(value);       
 
         // setting record value is setting value for all fields/records composing the record
         for f in &mut self.flist {
@@ -263,32 +264,6 @@ impl<T> Record<T> {
         self.flist.retain(|e| !pred(e))
     }    
 
-/*    /// Sets the record value (which is equivalent to setting all fields).
-    pub fn set_value(&mut self, value: &str) {
-        let s: String;
-
-        // if shorter, left-pad with blanks
-        if value.len() < self.calculated_length {
-            s = format!("{:length$} ", value, length=self.calculated_length);
-        }
-        else {
-            s = value.to_string();
-        }
-
-        // setting record value is setting value for all fields/records composing the record
-/*        for f in &mut self.flist {
-            let r = f.lower_offset..f.upper_offset;
-            f.set_value(&s[r]);
-        } */
-
-        // this is made for UTF-8 strings
-        for f in &mut self.flist {
-            let fvalue: String = s.chars().skip(f.lower_offset).take(f.length).collect();
-            f.set_value(&fvalue);
-        }         
-
-    }*/ 
-
     /// Returns the record value (concatenation of all field values).
     pub fn value(&self) -> String {
         let v: Vec<_> = self.flist.iter().map(|f| f.raw_value.clone()).collect();   
@@ -332,14 +307,16 @@ impl<T> Record<T> {
         f.value()
     } 
 
-    /// Adjusts value according to record length.  
-    fn adjust_value(&self, value: &str) -> String {
+    /// Adjusts the line value to the record length. Use Cow to avoid string duplication
+    /// when the value is not padded with blanks.
+    fn adjust_value<'a>(&self, value: &'a str) -> Cow<'a, str> {
         // if shorter, left-pad with blanks
         if value.len() < self.calculated_length {
-            format!("{:length$} ", value, length=self.calculated_length)
+            //format!("{:length$} ", value, length=self.calculated_length)
+            Cow::Owned(format!("{:length$} ", value, length=self.calculated_length))
         }
         else {
-            value.to_string()
+            Cow::Borrowed(value)
         }
     }
 }
@@ -443,10 +420,10 @@ pub mod setup {
     pub fn set_up_by_length<T>() -> Record<T> {
         let ft1 = Rc::new(FieldDataType::new("I", "integer"));                  
         
-        let f1 = Field::new("FIELD1", "Description for field 1", &ft1, 10);
-        let f2 = Field::new("FIELD2", "Description for field 2", &ft1, 10);
-        let f3 = Field::new("FIELD3", "Description for field 3", &ft1, 20);
-        let f4 = Field::new("FIELD2", "Description for field 2", &ft1, 10);        
+        let f1 = Field::from_length("FIELD1", "Description for field 1", &ft1, 10);
+        let f2 = Field::from_length("FIELD2", "Description for field 2", &ft1, 10);
+        let f3 = Field::from_length("FIELD3", "Description for field 3", &ft1, 20);
+        let f4 = Field::from_length("FIELD2", "Description for field 2", &ft1, 10);        
 
         let mut rec = Record::<T>::new("RECORD1", "Description for record 1", 20);
 
@@ -462,10 +439,10 @@ pub mod setup {
     pub fn set_up_by_offset<T>() -> Record<T> {
         let ft1 = Rc::new(FieldDataType::new("I", "integer"));                  
         
-        let f1 = Field::new_with_offset("FIELD1", "Description for field 1", &ft1, 5, 9);
-        let f2 = Field::new_with_offset("FIELD2", "Description for field 2", &ft1, 15, 19);
-        let f3 = Field::new_with_offset("FIELD3", "Description for field 3", &ft1, 30, 39);
-        let f4 = Field::new_with_offset("FIELD2", "Description for field 2", &ft1, 50, 60);        
+        let f1 = Field::from_offset("FIELD1", "Description for field 1", &ft1, 5, 9);
+        let f2 = Field::from_offset("FIELD2", "Description for field 2", &ft1, 15, 19);
+        let f3 = Field::from_offset("FIELD3", "Description for field 3", &ft1, 30, 39);
+        let f4 = Field::from_offset("FIELD2", "Description for field 2", &ft1, 50, 60);        
 
         let mut rec = Record::<T>::new("RECORD1", "Description for record 1", 0);
 
@@ -484,7 +461,7 @@ pub mod setup {
         let mut rec = Record::<T>::new("RECORD1", "Description for record 1", 0);
 
         for i in 0..size {
-            let f = Field::new("FIELD1", "Description for field 1", &ft1, 10);
+            let f = Field::from_length("FIELD1", "Description for field 1", &ft1, 10);
             rec.push(f);
         }                 
 
@@ -539,16 +516,16 @@ mod tests {
         assert_eq!(vector_of!(rec, raw_value), vec!["AAAAAAAAAA", "BBBBBBBBBB", "CCCCCCCCCCCCCCCCCCCC", "DDDDDDDDDD"]);
         
         // line is shorter than the length in chars
-        let s4 = "AAAAAAAAAA";
+        let s4 = "ZZZZZZZZZZ";
         rec.set_value(&s4);
-        assert_eq!(rec[0].value(), "AAAAAAAAAA");
+        assert_eq!(rec[0].value(), "ZZZZZZZZZZ");
         assert_eq!(rec[1].raw_value, "          "); 
         assert_eq!(rec[2].raw_value, "                    ");    
         assert_eq!(rec[3].raw_value, "          "); 
         assert_eq!(rec[1].value(), ""); 
         assert_eq!(rec[2].value(), "");    
         assert_eq!(rec[3].value(), "");  
-        assert_eq!(vector_of!(rec, str_value), vec!["AAAAAAAAAA", "", "", ""]);
+        assert_eq!(vector_of!(rec, str_value), vec!["ZZZZZZZZZZ", "", "", ""]);
 
     }
 
