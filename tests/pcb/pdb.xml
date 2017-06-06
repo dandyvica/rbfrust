@@ -1,0 +1,691 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rbfile
+    xmlns="http://www.w3schools.com"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.w3schools.com rbf.xsd"
+>
+
+    <meta version="3.30" description="Protein Data Bank"/>
+
+	<fieldtype name="A" type="string"/>
+	<fieldtype name="N" type="decimal"/>   
+
+    <record name="HEADER" description="First line of the entry, contains PDB ID code, classification, and date of deposition">
+        <field name="recName" description="Record name" type="String" start="1" end="6"/>
+        <field name="classification" description="Classifies the molecule(s)" type="String(40)" start="11" end="50"/>
+        <field name="depDate" description="Deposition date. This is the date the" type="Date" start="51" end="59"/>
+        <field name="idCode" description="This identifier is unique within the" type="IDcode" start="63" end="66"/>
+    </record>
+
+    <record name="OBSLTE" description="Statement that the entry has been removed from distribution and list of the ID code(s) which replaced it">
+        <field name="recName" description="Record name" type="String" start="1" end="6"/>
+        <field name="continuation" description="Allows concatenation of multiple records" type="Continuation" start="63" end="66"/>
+        <field name="repDate" description="Date that this entry was replaced" type="Date" start="12" end="20"/>
+        <field name="idCode" description="ID code of this entry" type="IDcode" start="22" end="25"/>
+        <field name="rIdCode" description="ID code of entry that replaced this one" type="IDcode" start="32" end="35"/>
+        <field name="rIdCode" description="ID code of entry that replaced this one" type="IDcode" start="37" end="40"/>
+        <field name="rIdCode" description="ID code of entry that replaced this one" type="IDcode" start="42" end="45"/>
+        <field name="rIdCode" description="ID code of entry that replaced this one" type="IDcode" start="47" end="50"/>
+        <field name="rIdCode" description="ID code of entry that replaced this one" type="IDcode" start="52" end="55"/>
+        <field name="rIdCode" description="ID code of entry that replaced this one" type="IDcode" start="57" end="60"/>
+        <field name="rIdCode" description="ID code of entry that replaced this one" type="IDcode" start="62" end="65"/>
+        <field name="rIdCode" description="ID code of entry that replaced this one" type="IDcode" start="67" end="70"/>
+        <field name="rIdCode" description="ID code of entry that replaced this one" type="IDcode" start="72" end="75"/>
+    </record>
+
+    <record name="TITLE " description="Description of the experiment represented in the entry">
+        <field name="recName" description="Record name" type="String" start="1" end="6"/>
+        <field name="continuation" description="Allows concatenation of multiple records" type="Continuation" start="72" end="75"/>
+        <field name="title" description="Title of the experiment" type="String" start="11" end="80"/>
+    </record>
+
+    <record name="SPLIT " description="List of PDB entries that compose a larger macromolecular complexes">
+        <field name="recName" description="Record name" type="String" start="1" end="6"/>
+        <field name="continuation" description="Allows concatenation of multiple records" type="Continuation" start="11" end="80"/>
+        <field name="idCode" description="ID code of related entry" type="IDcode" start="12" end="15"/>
+        <field name="idCode" description="ID code of related entry" type="IDcode" start="17" end="20"/>
+        <field name="idCode" description="ID code of related entry" type="IDcode" start="22" end="25"/>
+        <field name="idCode" description="ID code of related entry" type="IDcode" start="27" end="30"/>
+        <field name="idCode" description="ID code of related entry" type="IDcode" start="32" end="35"/>
+        <field name="idCode" description="ID code of related entry" type="IDcode" start="37" end="40"/>
+        <field name="idCode" description="ID code of related entry" type="IDcode" start="42" end="45"/>
+        <field name="idCode" description="ID code of related entry" type="IDcode" start="47" end="50"/>
+        <field name="idCode" description="ID code of related entry" type="IDcode" start="52" end="55"/>
+        <field name="idCode" description="ID code of related entry" type="IDcode" start="57" end="60"/>
+        <field name="idCode" description="ID code of related entry" type="IDcode" start="62" end="65"/>
+        <field name="idCode" description="ID code of related entry" type="IDcode" start="67" end="70"/>
+        <field name="idCode" description="ID code of related entry" type="IDcode" start="72" end="75"/>
+        <field name="idCode" description="ID code of related entry" type="IDcode" start="77" end="80"/>
+    </record>
+
+    <record name="CAVEAT" description="Severe error indicator">
+        <field name="recName" description="Record name" type="String" start="1" end="6"/>
+        <field name="continuation" description="Allows concatenation of multiple records" type="Continuation" start="77" end="80"/>
+        <field name="idCode" description="PDB ID code of this entry" type="IDcode" start="12" end="15"/>
+        <field name="comment" description="Free text giving the reason for the CAVEAT" type="String" start="20" end="79"/>
+    </record>
+
+    <record name="COMPND" description="Description of macromolecular contents of the entry">
+        <field name="recName" description="Record name" type="String" start="1" end="6"/>
+        <field name="continuation" description="Allows concatenation of multiple records" type="Continuation" start="20" end="79"/>
+        <field name="compound" description="Description of the molecular components" type="Specification" start="11" end="80"/>
+    </record>
+
+    <record name="SOURCE" description="Biological source of macromolecules in the entry">
+        <field name="recName" description="Record name" type="String" start="1" end="6"/>
+        <field name="continuation" description="Allows concatenation of multiple records" type="Continuation" start="11" end="80"/>
+        <field name="srcName" description="Identifies the source of the" type="Specification" start="11" end="79"/>
+    </record>
+
+    <record name="KEYWDS" description="List of keywords describing the macromolecule">
+        <field name="recName" description="Record name" type="String" start="1" end="6"/>
+        <field name="continuation" description="Allows concatenation of records if necessary" type="Continuation" start="11" end="79"/>
+        <field name="keywds" description="Comma-separated list of keywords relevant" type="List" start="11" end="79"/>
+    </record>
+
+    <record name="EXPDTA" description="Experimental technique used for the structure determination">
+        <field name="recName" description="Record name" type="String" start="1" end="6"/>
+        <field name="continuation" description="Allows concatenation of multiple records" type="Continuation" start="11" end="79"/>
+        <field name="technique" description="The experimental technique(s) with" type="SList" start="11" end="79"/>
+    </record>
+
+    <record name="NUMMDL" description="Number of models">
+        <field name="recName" description="Record name" type="String" start="1" end="6"/>
+        <field name="modelNumber" description="Number of models" type="Integer" start="11" end="14"/>
+    </record>
+
+    <record name="MDLTYP" description="Contains additional annotation pertinent to the coordinates">
+        <field name="recName" description="Record name" type="String" start="1" end="6"/>
+        <field name="continuation" description="Allows concatenation of multiple records" type="Continuation" start="11" end="14"/>
+        <field name="comment" description="Free Text providing additional structural" type="SList" start="11" end="80"/>
+    </record>
+
+    <record name="AUTHOR" description="List of contributors">
+        <field name="recName" description="Record name" type="String" start="1" end="6"/>
+        <field name="continuation" description="Allows concatenation of multiple records" type="Continuation" start="11" end="80"/>
+        <field name="authorList" description="List of the author names, separated" type="List" start="11" end="79"/>
+    </record>
+
+    <record name="REVDAT" description="Revision date and related information">
+        <field name="recName" description="Record name" type="String" start="1" end="6"/>
+        <field name="modNum" description="Modification number" type="Integer" start="11" end="79"/>
+        <field name="continuation" description="Allows concatenation of multiple records" type="Continuation" start="11" end="12"/>
+        <field name="modDate" description="Date of modification (or release for" type="Date" start="14" end="22"/>
+        <field name="modId" description="ID code of this entry. This is not repeated" type="IDCode" start="24" end="27"/>
+        <field name="modType" description="An integer identifying the type of" type="Integer" start="32" end="32"/>
+        <field name="record" description="Modification detail" type="LString(6)" start="40" end="45"/>
+        <field name="record" description="Modification detail" type="LString(6)" start="47" end="52"/>
+        <field name="record" description="Modification detail" type="LString(6)" start="54" end="59"/>
+        <field name="record" description="Modification detail" type="LString(6)" start="61" end="66"/>
+    </record>
+
+    <record name="SPRSDE" description="List of entries obsoleted from public release and replaced by current entry">
+        <field name="recName" description="Record name" type="String" start="1" end="6"/>
+        <field name="continuation" description="Allows for multiple ID codes" type="Continuation" start="61" end="66"/>
+        <field name="sprsdeDate" description="Date this entry superseded the listed" type="Date" start="12" end="20"/>
+        <field name="idCode" description="ID code of this entry. This field is not" type="IDcode" start="22" end="25"/>
+        <field name="sIdCode" description="ID code of a superseded entry" type="IDcode" start="32" end="35"/>
+        <field name="sIdCode" description="ID code of a superseded entry" type="IDcode" start="37" end="40"/>
+        <field name="sIdCode" description="ID code of a superseded entry" type="IDcode" start="42" end="45"/>
+        <field name="sIdCode" description="ID code of a superseded entry" type="IDcode" start="47" end="50"/>
+        <field name="sIdCode" description="ID code of a superseded entry" type="IDcode" start="52" end="55"/>
+        <field name="sIdCode" description="ID code of a superseded entry" type="IDcode" start="57" end="60"/>
+        <field name="sIdCode" description="ID code of a superseded entry" type="IDcode" start="62" end="65"/>
+        <field name="sIdCode" description="ID code of a superseded entry" type="IDcode" start="67" end="70"/>
+        <field name="sIdCode" description="ID code of a superseded entry" type="IDcode" start="72" end="75"/>
+    </record>
+
+    <record name="JRNL  " description="Literature citation that defines the coordinate set">
+        <field name="recName" description="Record name" type="String" start="1" end="6"/>
+        <field name="text" description="See Details below" type="LString" start="13" end="79"/>
+    </record>
+
+    <record name="REMARK" description="General remarks; they can be structured or free form">
+        <field name="recName" description="Record name" type="String" start="1" end="6"/>
+        <field name="1" description="" type="LString(1)" start="10" end="10"/>
+        <field name="auth" description="Appears on all continuation records" type="LString(4)" start="13" end="16"/>
+        <field name="continuation" description="Allows a long list of authors" type="Continuation" start="17" end="18"/>
+        <field name="authorList" description="List of the authors" type="List" start="20" end="79"/>
+    </record>
+
+    <record name="REMARK" description="General remarks; they can be structured or free form">
+        <field name="recName" description="Record name" type="String" start="1" end="6"/>
+        <field name="1" description="" type="LString(1)" start="10" end="10"/>
+        <field name="titl" description="Appears on all continuation records" type="LString(4)" start="13" end="16"/>
+        <field name="continuation" description="Permits long titles" type="Continuation" start="17" end="18"/>
+        <field name="title" description="Title of the article" type="LString" start="20" end="79"/>
+    </record>
+
+    <record name="REMARK" description="General remarks; they can be structured or free form">
+        <field name="recName" description="Record name" type="String" start="1" end="6"/>
+        <field name="1" description="" type="LString(1)" start="10" end="10"/>
+        <field name="titl" description="Appears on all continuation records" type="LString(4)" start="13" end="16"/>
+        <field name="continuation" description="Permits long titles" type="Continuation" start="17" end="18"/>
+        <field name="title" description="Title of the article" type="LString" start="20" end="79"/>
+    </record>
+
+    <record name="JRNL  " description="Literature citation that defines the coordinate set">
+        <field name="recName" description="Record name" type="String" start="1" end="6"/>
+        <field name="ref" description="" type="LString(3)" start="13" end="16"/>
+        <field name="tbp" description="TO BE PUBLISHED" type="LString(15)" start="20" end="34"/>
+    </record>
+
+    <record name="JRNL  " description="Literature citation that defines the coordinate set">
+        <field name="recName" description="Record name" type="String" start="1" end="6"/>
+        <field name="ref " description="" type="LString(3)" start="13" end="16"/>
+        <field name="continuation" description="Allows long publication names" type="Continuation" start="17" end="18"/>
+        <field name="pubName" description="Name of the publication including section" type="LString" start="20" end="47"/>
+        <field name="v." description="Appears in the first sub-record only," type="LString(2)" start="50" end="51"/>
+        <field name="volume" description="Right-justified blank-filled volume" type="String" start="52" end="55"/>
+        <field name="page" description="First page of the article; appears in" type="String" start="57" end="61"/>
+        <field name="year" description="Year of publication; first sub-record only" type="Integer" start="63" end="66"/>
+    </record>
+
+    <record name="JRNL  " description="Literature citation that defines the coordinate set">
+        <field name="recName" description="Record name" type="String" start="1" end="6"/>
+        <field name="publ" description="" type="LString(4)" start="13" end="16"/>
+        <field name="continuation" description="Allows long publisher and place names" type="Continuation" start="17" end="18"/>
+        <field name="pub" description="City of publication and name of the" type="LString" start="20" end="70"/>
+    </record>
+
+    <record name="JRNL  " description="Literature citation that defines the coordinate set">
+        <field name="recName" description="Record name" type="String" start="1" end="6"/>
+        <field name="refn" description="" type="LString(4)" start="13" end="16"/>
+    </record>
+
+    <record name="JRNL  " description="Literature citation that defines the coordinate set">
+        <field name="recName" description="Record name" type="String" start="1" end="6"/>
+        <field name="refn" description="" type="LString(4)" start="13" end="16"/>
+        <field name="issn" description="International Standard Serial Number or" type="LString(4)" start="36" end="39"/>
+        <field name="issn" description="ISSN number (final digit may be a" type="LString" start="41" end="65"/>
+    </record>
+
+    <record name="JRNL  " description="Literature citation that defines the coordinate set">
+        <field name="recName" description="Record name" type="String" start="1" end="6"/>
+        <field name="pmid" description="" type="LString(4)" start="13" end="16"/>
+        <field name="continuation" description="unique PubMed identifier number assigned to" type="Integer" start="20" end="79"/>
+    </record>
+
+    <record name="JRNL  " description="Literature citation that defines the coordinate set">
+        <field name="recName" description="Record name" type="String" start="1" end="6"/>
+        <field name="doi " description="" type="LString(4)" start="13" end="16"/>
+        <field name="continuation" description="Unique DOI assigned to the publication" type="LString" start="20" end="79"/>
+    </record>
+
+    <record name="REMARK" description="General remarks; they can be structured or free form">
+        <field name="recName" description="Record name" type="String" start="1" end="6"/>
+        <field name="remarkNum" description="Remark number. It is not an error for" type="Integer" start="20" end="79"/>
+        <field name="empty" description="Left as white space in first line" type="LString" start="12" end="79"/>
+    </record>
+
+    <record name="REMARK" description="General remarks; they can be structured or free form">
+        <field name="recName" description="Record name" type="String" start="1" end="6"/>
+        <field name="1" description="" type="LString(1)" start="10" end="10"/>
+        <field name="reference" description="" type="LString(9)" start="12" end="20"/>
+        <field name="refNum" description="Reference number. Starts with 1" type="Integer" start="22" end="70"/>
+    </record>
+
+    <record name="REMARK" description="General remarks; they can be structured or free form">
+        <field name="recName" description="Record name" type="String" start="1" end="6"/>
+        <field name="1" description="" type="LString(1)" start="10" end="10"/>
+        <field name="auth" description="Appears on all continuation records" type="LString(4)" start="13" end="16"/>
+        <field name="continuation" description="Allows a long list of authors" type="Continuation" start="17" end="18"/>
+        <field name="authorList" description="List of the authors" type="List" start="20" end="79"/>
+    </record>
+
+    <record name="REMARK" description="General remarks; they can be structured or free form">
+        <field name="recName" description="Record name" type="String" start="1" end="6"/>
+        <field name="1" description="" type="LString(1)" start="10" end="10"/>
+        <field name="titl" description="Appears on all continuation records" type="LString(4)" start="13" end="16"/>
+        <field name="continuation" description="Permits long titles" type="Continuation" start="17" end="18"/>
+        <field name="title" description="Title of the article" type="LString" start="20" end="79"/>
+    </record>
+
+    <record name="REMARK" description="General remarks; they can be structured or free form">
+        <field name="recName" description="Record name" type="String" start="1" end="6"/>
+        <field name="1" description="" type="LString(1)" start="10" end="10"/>
+        <field name="titl" description="Appears on all continuation records" type="LString(4)" start="13" end="16"/>
+        <field name="continuation" description="Permits long list of editors" type="Continuation" start="17" end="18"/>
+        <field name="editorList" description="List of the editors" type="LString" start="20" end="79"/>
+    </record>
+
+    <record name="REMARK" description="General remarks; they can be structured or free form">
+        <field name="recName" description="Record name" type="String" start="1" end="6"/>
+        <field name="1" description="" type="LString(1)" start="10" end="10"/>
+        <field name="ref" description="" type="LString(3)" start="13" end="16"/>
+        <field name="tbp" description="TO BE PUBLISHED" type="LString(15)" start="20" end="34"/>
+    </record>
+
+    <record name="REMARK" description="General remarks; they can be structured or free form">
+        <field name="recName" description="Record name" type="String" start="1" end="6"/>
+        <field name="1" description="" type="LString(1)" start="10" end="10"/>
+        <field name="ref" description="" type="LString(3)" start="13" end="16"/>
+        <field name="continuation" description="Permits long publication names" type="Continuation" start="17" end="18"/>
+        <field name="pubName" description="Name of the publication including section" type="LString" start="20" end="47"/>
+        <field name="v." description="Appears in the first record only, and only" type="LString(2)" start="50" end="51"/>
+        <field name="volume" description="Right-justified blank-filled volume" type="String" start="52" end="55"/>
+        <field name="page" description="First page of the article; appears in the" type="String" start="57" end="61"/>
+        <field name="year" description="First record year of publication" type="Integer" start="63" end="66"/>
+    </record>
+
+    <record name="REMARK" description="General remarks; they can be structured or free form">
+        <field name="recName" description="Record name" type="String" start="1" end="6"/>
+        <field name="1" description="" type="LString(1)" start="10" end="10"/>
+        <field name="publ" description="" type="LString(4)" start="13" end="16"/>
+        <field name="continuation" description="Permits long publisher and city" type="Continuation" start="17" end="18"/>
+        <field name="pub" description="Name of the publisher and city of" type="LString" start="20" end="70"/>
+    </record>
+
+    <record name="REMARK" description="General remarks; they can be structured or free form">
+        <field name="recName" description="Record name" type="String" start="1" end="6"/>
+        <field name="1" description="" type="LString(1)" start="10" end="10"/>
+        <field name="refn" description="" type="LString(4)" start="13" end="16"/>
+    </record>
+
+    <record name="REMARK" description="General remarks; they can be structured or free form">
+        <field name="recName" description="Record name" type="String" start="1" end="6"/>
+        <field name="1" description="" type="LString(1)" start="10" end="10"/>
+        <field name="refn" description="" type="LString(4)" start="13" end="16"/>
+        <field name="issn or" description="International Standard Serial Number or" type="LString(4)" start="36" end="39"/>
+        <field name="issn" description="ISSN number" type="LString" start="41" end="65"/>
+    </record>
+
+    <record name="JRNL  " description="Literature citation that defines the coordinate set">
+        <field name="recName" description="Record name" type="String" start="1" end="6"/>
+        <field name="pmid" description="" type="LString(4)" start="13" end="16"/>
+        <field name="continuation" description="unique PubMed identifier number assigned" type="Integer" start="20" end="79"/>
+    </record>
+
+    <record name="JRNL  " description="Literature citation that defines the coordinate set">
+        <field name="recName" description="Record name" type="String" start="1" end="6"/>
+        <field name="doi " description="" type="LString(4)" start="13" end="16"/>
+        <field name="continuation" description="Unique DOI assigned to the" type="LString" start="20" end="79"/>
+    </record>
+
+    <record name="REMARK" description="General remarks; they can be structured or free form">
+        <field name="recName" description="Record name" type="String" start="1" end="6"/>
+        <field name="2" description="" type="LString(1)" start="10" end="10"/>
+        <field name="resolution." description="" type="LString(11)" start="12" end="22"/>
+        <field name="resolution" description="Resolution" type="Real(7.2)" start="24" end="30"/>
+        <field name="angstroms." description="" type="LString(10)" start="32" end="41"/>
+    </record>
+
+    <record name="REMARK" description="General remarks; they can be structured or free form">
+        <field name="recName" description="Record name" type="String" start="1" end="6"/>
+        <field name="2" description="" type="LString(1)" start="10" end="10"/>
+        <field name="resolution" description="RESOLUTION. NOT APPLICABLE" type="LString(28)" start="12" end="38"/>
+    </record>
+
+    <record name="DBREF " description="Reference to the entry in the sequence database(s)">
+        <field name="recName" description="Record name" type="String" start="1" end="6"/>
+        <field name="idCode" description="ID code of this entry" type="IDcode" start="12" end="38"/>
+        <field name="chainID" description="Chain identifier" type="Character" start="13" end="13"/>
+        <field name="seqBegin" description="Initial sequence number of the" type="Integer" start="15" end="18"/>
+        <field name="insertBegin" description="Initial insertion code of the" type="AChar" start="19" end="19"/>
+        <field name="seqEnd" description="Ending sequence number of the" type="Integer" start="21" end="24"/>
+        <field name="insertEnd" description="Ending insertion code of the" type="AChar" start="25" end="25"/>
+        <field name="database" description="Sequence database name" type="LString" start="27" end="32"/>
+        <field name="dbAccession" description="Sequence database accession code" type="LString" start="34" end="41"/>
+        <field name="dbIdCode" description="Sequence database identification code" type="LString" start="43" end="54"/>
+        <field name="dbseqBegin" description="Initial sequence number of the" type="Integer" start="56" end="60"/>
+        <field name="idbnsBeg" description="Insertion code of initial residue of" type="AChar" start="61" end="61"/>
+        <field name="dbseqEnd" description="Ending sequence number of the" type="Integer" start="63" end="67"/>
+        <field name="dbinsEnd" description="Insertion code of the ending residue of" type="AChar" start="68" end="68"/>
+    </record>
+
+    <record name="DBREF1" description="Reference to the entry in the sequence database(s)">
+        <field name="recName" description="Record name" type="String" start="1" end="6"/>
+        <field name="idCode" description="ID code of this entry" type="IDcode" start="68" end="68"/>
+        <field name="chainID" description="Chain identifier" type="Character" start="13" end="13"/>
+        <field name="seqBegin" description="Initial sequence number of the" type="Integer" start="15" end="18"/>
+        <field name="insertBegin" description="Initial insertion code of the" type="AChar" start="19" end="19"/>
+        <field name="seqEnd" description="Ending sequence number of the" type="Integer" start="21" end="24"/>
+        <field name="insertEnd" description="Ending insertion code of the" type="AChar" start="25" end="25"/>
+        <field name="database" description="Sequence database name" type="LString" start="27" end="32"/>
+        <field name="dbIdCode" description="Sequence database identification code," type="LString" start="48" end="67"/>
+    </record>
+
+    <record name="DBREF2" description="Reference to the entry in the sequence database(s)">
+        <field name="recName" description="Record name" type="String" start="1" end="6"/>
+        <field name="idCode" description="ID code of this entry" type="IDcode" start="48" end="67"/>
+        <field name="chainID" description="Chain identifier" type="Character" start="13" end="13"/>
+        <field name="dbAccession" description="Sequence database accession code," type="LString" start="19" end="40"/>
+        <field name="seqBegin" description="Initial sequence number of the" type="Integer" start="46" end="55"/>
+        <field name="seqEnd" description="Ending sequence number of the" type="Integer" start="58" end="67"/>
+    </record>
+
+    <record name="SEQADV" description="Identification of conflicts between PDB and the named sequence database">
+        <field name="recName" description="Record name" type="String" start="1" end="6"/>
+        <field name="idCode" description="ID code of this entry" type="IDcode" start="58" end="67"/>
+        <field name="resName" description="Name of the PDB residue in conflict" type="Residue name" start="13" end="15"/>
+        <field name="chainID" description="PDB chain identifier" type="Character" start="17" end="17"/>
+        <field name="seqNum" description="PDB sequence number" type="Integer" start="19" end="22"/>
+        <field name="iCode" description="PDB insertion code" type="AChar" start="23" end="23"/>
+        <field name="database" description="" type="LString" start="25" end="28"/>
+        <field name="dbAccession" description="Sequence database accession number" type="LString" start="30" end="38"/>
+        <field name="dbRes" description="Sequence database residue name" type="Residue name" start="40" end="42"/>
+        <field name="dbSeq" description="Sequence database sequence number" type="Integer" start="44" end="48"/>
+        <field name="conflict" description="Conflict comment" type="LString" start="50" end="70"/>
+    </record>
+
+    <record name="SEQRES" description="Primary sequence of backbone residues">
+        <field name="recName" description="Record name" type="String" start="1" end="6"/>
+        <field name="serNum" description="Serial number of the SEQRES record for the" type="Integer" start="50" end="70"/>
+        <field name="chainID" description="Chain identifier. This may be any single" type="Character" start="12" end="12"/>
+        <field name="numRes" description="Number of residues in the chain" type="Integer" start="14" end="17"/>
+        <field name="resName" description="Residue name" type="Residue name" start="20" end="22"/>
+        <field name="resName" description="Residue name" type="Residue name" start="24" end="26"/>
+        <field name="resName" description="Residue name" type="Residue name" start="28" end="30"/>
+        <field name="resName" description="Residue name" type="Residue name" start="32" end="34"/>
+        <field name="resName" description="Residue name" type="Residue name" start="36" end="38"/>
+        <field name="resName" description="Residue name" type="Residue name" start="40" end="42"/>
+        <field name="resName" description="Residue name" type="Residue name" start="44" end="46"/>
+        <field name="resName" description="Residue name" type="Residue name" start="48" end="50"/>
+        <field name="resName" description="Residue name" type="Residue name" start="52" end="54"/>
+        <field name="resName" description="Residue name" type="Residue name" start="56" end="58"/>
+        <field name="resName" description="Residue name" type="Residue name" start="60" end="62"/>
+        <field name="resName" description="Residue name" type="Residue name" start="64" end="66"/>
+        <field name="resName" description="Residue name" type="Residue name" start="68" end="70"/>
+    </record>
+
+    <record name="MODRES" description="Identification of modifications to standard residues">
+        <field name="recName" description="Record name" type="String" start="1" end="6"/>
+        <field name="idCode" description="ID code of this entry" type="IDcode" start="68" end="70"/>
+        <field name="resName" description="Residue name used in this entry" type="Residue name" start="13" end="15"/>
+        <field name="chainID" description="Chain identifier" type="Character" start="17" end="17"/>
+        <field name="seqNum" description="Sequence number" type="Integer" start="19" end="22"/>
+        <field name="iCode" description="Insertion code" type="AChar" start="23" end="23"/>
+        <field name="stdRes" description="Standard residue name" type="Residue name" start="25" end="27"/>
+        <field name="comment" description="Description of the residue modification" type="String" start="30" end="70"/>
+    </record>
+
+    <record name="HET   " description="Identification of non-standard groups heterogens)">
+        <field name="recName" description="Record name" type="String" start="1" end="6"/>
+        <field name="hetID" description="Het identifier, right-justified" type="LString(3)" start="30" end="70"/>
+        <field name="ChainID" description="Chain identifier" type="Character" start="13" end="13"/>
+        <field name="seqNum" description="Sequence number" type="Integer" start="14" end="17"/>
+        <field name="iCode" description="Insertion code" type="AChar" start="18" end="18"/>
+        <field name="numHetAtoms" description="Number of HETATM records for the group" type="Integer" start="21" end="25"/>
+        <field name="text" description="Text describing Het group" type="String" start="31" end="70"/>
+    </record>
+
+    <record name="HETNAM" description="Compound name of the heterogens">
+        <field name="recName" description="Record name" type="String" start="1" end="6"/>
+        <field name="continuation" description="Allows concatenation of multiple records" type="Continuation" start="31" end="70"/>
+        <field name="hetID" description="Het identifier, right-justified" type="LString(3)" start="12" end="14"/>
+        <field name="text" description="Chemical name" type="String" start="16" end="70"/>
+    </record>
+
+    <record name="HETSYN" description="Synonymous compound names for heterogens">
+        <field name="recName" description="Record name" type="String" start="1" end="6"/>
+        <field name="continuation" description="Allows concatenation of multiple records" type="Continuation" start="16" end="70"/>
+        <field name="hetID" description="Het identifier, right-justified" type="LString(3)" start="12" end="14"/>
+        <field name="hetSynonyms" description="List of synonyms" type="SList" start="16" end="70"/>
+    </record>
+
+    <record name="FORMUL" description="Chemical formula of non-standard groups">
+        <field name="recName" description="Record name" type="String" start="1" end="6"/>
+        <field name="compNum" description="Component number" type="Integer" start="16" end="70"/>
+        <field name="hetID" description="Het identifier" type="LString(3)" start="13" end="15"/>
+        <field name="continuation" description="Continuation number" type="Integer" start="17" end="18"/>
+        <field name="asterisk" description="'*' for water" type="Character" start="19" end="19"/>
+        <field name="text" description="Chemical formula" type="String" start="20" end="70"/>
+    </record>
+
+    <record name="HELIX " description="Identification of helical substructures">
+        <field name="recName" description="Record name" type="String" start="1" end="6"/>
+        <field name="serNum" description="Serial number of the helix. This starts" type="Integer" start="20" end="70"/>
+        <field name="helixID" description="Helix identifier. In addition to a serial" type="LString(3)" start="12" end="14"/>
+        <field name="initResName" description="Name of the initial residue" type="Residue name" start="16" end="18"/>
+        <field name="initChainID" description="Chain identifier for the chain containing" type="Character" start="20" end="20"/>
+        <field name="initSeqNum" description="Sequence number of the initial residue" type="Integer" start="22" end="25"/>
+        <field name="initICode" description="Insertion code of the initial residue" type="AChar" start="26" end="26"/>
+        <field name="endResName" description="Name of the terminal residue of the helix" type="Residue name" start="28" end="30"/>
+        <field name="endChainID" description="Chain identifier for the chain containing" type="Character" start="32" end="32"/>
+        <field name="endSeqNum" description="Sequence number of the terminal residue" type="Integer" start="34" end="37"/>
+        <field name="endICode" description="Insertion code of the terminal residue" type="AChar" start="38" end="38"/>
+        <field name="helixClass" description="Helix class (see below)" type="Integer" start="39" end="40"/>
+        <field name="comment" description="Comment about this helix" type="String" start="41" end="70"/>
+        <field name="length" description="Length of this helix" type="Integer" start="72" end="76"/>
+    </record>
+
+    <record name="SHEET " description="Identification of sheet substructures">
+        <field name="recName" description="Record name" type="String" start="1" end="6"/>
+        <field name="strand" description="Strand number which starts at 1 for each" type="Integer" start="72" end="76"/>
+        <field name="sheetID" description="Sheet identifier" type="LString(3)" start="12" end="14"/>
+        <field name="numStrands" description="Number of strands in sheet" type="Integer" start="15" end="16"/>
+        <field name="initResName" description="Residue name of initial residue" type="Residue name" start="18" end="20"/>
+        <field name="initChainID" description="Chain identifier of initial residue" type="Character" start="22" end="22"/>
+        <field name="initSeqNum" description="Sequence number of initial residue" type="Integer" start="23" end="26"/>
+        <field name="initICode" description="Insertion code of initial residue" type="AChar" start="27" end="27"/>
+        <field name="endResName" description="Residue name of terminal residue" type="Residue name" start="29" end="31"/>
+        <field name="endChainID" description="Chain identifier of terminal residue" type="Character" start="33" end="33"/>
+        <field name="endSeqNum" description="Sequence number of terminal residue" type="Integer" start="34" end="37"/>
+        <field name="endICode" description="Insertion code of terminal residue" type="AChar" start="38" end="38"/>
+        <field name="sense" description="Sense of strand with respect to previous" type="Integer" start="39" end="40"/>
+        <field name="curAtom" description="Registration. Atom name in current strand" type="Atom" start="42" end="45"/>
+        <field name="curResName" description="Registration. Residue name in current" type="Residue name" start="46" end="48"/>
+        <field name="curChainId" description="Registration. Chain identifier in" type="Character" start="50" end="50"/>
+        <field name="curResSeq" description="Registration. Residue sequence number" type="Integer" start="51" end="54"/>
+        <field name="curICode" description="Registration. Insertion code in" type="AChar" start="55" end="55"/>
+        <field name="prevAtom" description="Registration. Atom name in previous strand" type="Atom" start="57" end="60"/>
+        <field name="prevResName" description="Registration. Residue name in" type="Residue name" start="61" end="63"/>
+        <field name="prevChainId" description="Registration. Chain identifier in" type="Character" start="65" end="65"/>
+        <field name="prevResSeq" description="Registration. Residue sequence number" type="Integer" start="66" end="69"/>
+        <field name="prevICode" description="Registration. Insertion code in" type="AChar" start="70" end="70"/>
+    </record>
+
+    <record name="SSBOND" description="Identification of disulfide bonds">
+        <field name="recName" description="Record name" type="String" start="1" end="6"/>
+        <field name="serNum" description="Serial number" type="Integer" start="70" end="70"/>
+        <field name="cys" description="Residue name" type="LString(3)" start="12" end="14"/>
+        <field name="chainID1" description="Chain identifier" type="Character" start="16" end="16"/>
+        <field name="seqNum1" description="Residue sequence number" type="Integer" start="18" end="21"/>
+        <field name="icode1" description="Insertion code" type="AChar" start="22" end="22"/>
+        <field name="cys" description="Residue name" type="LString(3)" start="26" end="28"/>
+        <field name="chainID2" description="Chain identifier" type="Character" start="30" end="30"/>
+        <field name="seqNum2" description="Residue sequence number" type="Integer" start="32" end="35"/>
+        <field name="icode2" description="Insertion code" type="AChar" start="36" end="36"/>
+        <field name="sym1" description="Symmetry operator for residue 1" type="SymOP" start="60" end="65"/>
+        <field name="sym2" description="Symmetry operator for residue 2" type="SymOP" start="67" end="72"/>
+        <field name="Length" description="Disulfide bond distance" type="Real(5.2)" start="74" end="78"/>
+    </record>
+
+    <record name="LINK  " description="Identification of inter-residue bonds">
+        <field name="recName" description="Record name" type="String" start="1" end="6"/>
+        <field name="name1" description="Atom name" type="Atom" start="13" end="16"/>
+        <field name="altLoc1" description="Alternate location indicator" type="Character" start="17" end="17"/>
+        <field name="resName1" description="Residue name" type="Residue name" start="18" end="20"/>
+        <field name="chainID1" description="Chain identifier" type="Character" start="22" end="22"/>
+        <field name="resSeq1" description="Residue sequence number" type="Integer" start="23" end="26"/>
+        <field name="iCode1" description="Insertion code" type="AChar" start="27" end="27"/>
+        <field name="name2" description="Atom name" type="Atom" start="43" end="46"/>
+        <field name="altLoc2" description="Alternate location indicator" type="Character" start="47" end="47"/>
+        <field name="resName2" description="Residue name" type="Residue name" start="48" end="50"/>
+        <field name="chainID2" description="Chain identifier" type="Character" start="52" end="52"/>
+        <field name="resSeq2" description="Residue sequence number" type="Integer" start="53" end="56"/>
+        <field name="iCode2" description="Insertion code" type="AChar" start="57" end="57"/>
+        <field name="sym1" description="Symmetry operator atom 1" type="SymOP" start="60" end="65"/>
+        <field name="sym2" description="Symmetry operator atom 2" type="SymOP" start="67" end="72"/>
+        <field name="Length" description="Link distance" type="Real(5.2)" start="74" end="78"/>
+    </record>
+
+    <record name="CISPEP" description="Identification of peptide residues in cis conformation">
+        <field name="recName" description="Record name" type="String" start="1" end="6"/>
+        <field name="serNum" description="Record serial number" type="Integer" start="74" end="78"/>
+        <field name="pep1" description="Residue name" type="LString(3)" start="12" end="14"/>
+        <field name="chainID1" description="Chain identifier" type="Character" start="16" end="16"/>
+        <field name="seqNum1" description="Residue sequence number" type="Integer" start="18" end="21"/>
+        <field name="icode1" description="Insertion code" type="AChar" start="22" end="22"/>
+        <field name="pep2" description="Residue name" type="LString(3)" start="26" end="28"/>
+        <field name="chainID2" description="Chain identifier" type="Character" start="30" end="30"/>
+        <field name="seqNum2" description="Residue sequence number" type="Integer" start="32" end="35"/>
+        <field name="icode2" description="Insertion code" type="AChar" start="36" end="36"/>
+        <field name="modNum" description="Identifies the specific model" type="Integer" start="44" end="46"/>
+        <field name="measure" description="Angle measurement in degrees" type="Real(6.2)" start="54" end="59"/>
+    </record>
+
+    <record name="SITE  " description="Identification of groups comprising important entity sites">
+        <field name="recName" description="Record name" type="String" start="1" end="6"/>
+        <field name="seqNum" description="Sequence number" type="Integer" start="54" end="59"/>
+        <field name="siteID" description="Site name" type="LString(3)" start="12" end="14"/>
+        <field name="numRes" description="Number of residues that compose the site" type="Integer" start="16" end="17"/>
+        <field name="resName1" description="Residue name for first residue that" type="Residue name" start="19" end="21"/>
+        <field name="chainID1" description="Chain identifier for first residue of site" type="Character" start="23" end="23"/>
+        <field name="seq1" description="Residue sequence number for first residue" type="Integer" start="24" end="27"/>
+        <field name="iCode1" description="Insertion code for first residue of the" type="AChar" start="28" end="28"/>
+        <field name="resName2" description="Residue name for second residue that" type="Residue name" start="30" end="32"/>
+        <field name="chainID2" description="Chain identifier for second residue of" type="Character" start="34" end="34"/>
+        <field name="seq2" description="Residue sequence number for second" type="Integer" start="35" end="38"/>
+        <field name="iCode2" description="Insertion code for second residue" type="AChar" start="39" end="39"/>
+        <field name="resName3" description="Residue name for third residue that" type="Residue name" start="41" end="43"/>
+        <field name="chainID3" description="Chain identifier for third residue" type="Character" start="45" end="45"/>
+        <field name="seq3" description="Residue sequence number for third" type="Integer" start="46" end="49"/>
+        <field name="iCode3" description="Insertion code for third residue" type="AChar" start="50" end="50"/>
+        <field name="resName4" description="Residue name for fourth residue that" type="Residue name" start="52" end="54"/>
+        <field name="chainID4" description="Chain identifier for fourth residue" type="Character" start="56" end="56"/>
+        <field name="seq4" description="Residue sequence number for fourth" type="Integer" start="57" end="60"/>
+        <field name="iCode4" description="Insertion code for fourth residue" type="AChar" start="61" end="61"/>
+    </record>
+
+    <record name="CRYST1" description="Unit cell parameters, space group, and Z">
+        <field name="recName" description="Record name" type="String" start="1" end="6"/>
+        <field name="a" description="a (Angstroms)" type="Real(9.3)" start="61" end="61"/>
+        <field name="b" description="b (Angstroms)" type="Real(9.3)" start="16" end="24"/>
+        <field name="c" description="c (Angstroms)" type="Real(9.3)" start="25" end="33"/>
+        <field name="alpha" description="alpha (degrees)" type="Real(7.2)" start="34" end="40"/>
+        <field name="beta" description="beta (degrees)" type="Real(7.2)" start="41" end="47"/>
+        <field name="gamma" description="gamma (degrees)" type="Real(7.2)" start="48" end="54"/>
+        <field name="sGroup" description="Space group" type="LString" start="56" end="66"/>
+        <field name="z" description="Z value" type="Integer" start="67" end="70"/>
+    </record>
+
+    <record name="ORIGXn" description="Transformation from orthogonal coordinates to the submitted coordinates (n = 1, 2, or 3)">
+        <field name="recName" description="Record name" type="String" start="1" end="6"/>
+        <field name="o[n][1]" description="On1" type="Real(10.6)" start="11" end="20"/>
+        <field name="o[n][2]" description="On2" type="Real(10.6)" start="21" end="30"/>
+        <field name="o[n][3]" description="On3" type="Real(10.6)" start="31" end="40"/>
+        <field name="t[n]" description="Tn" type="Real(10.5)" start="46" end="55"/>
+    </record>
+
+    <record name="SCALEn" description="Transformation from orthogonal coordinates to fractional crystallographic coordinates (n = 1, 2, or 3)">
+        <field name="recName" description="Record name" type="String" start="1" end="6"/>
+        <field name="s[n][1]" description="Sn1" type="Real(10.6)" start="11" end="20"/>
+        <field name="s[n][2]" description="Sn2" type="Real(10.6)" start="21" end="30"/>
+        <field name="s[n][3]" description="Sn3" type="Real(10.6)" start="31" end="40"/>
+        <field name="u[n]" description="Un" type="Real(10.5)" start="46" end="55"/>
+    </record>
+
+    <record name="MTRIXn" description="Transformations expressing non-crystallographic symmetry (n = 1, 2, or 3). There may be multiple sets of these records">
+        <field name="recName" description="Record name" type="String" start="1" end="6"/>
+        <field name="serial" description="Serial number" type="Integer" start="46" end="55"/>
+        <field name="m[n][1]" description="Mn1" type="Real(10.6)" start="11" end="20"/>
+        <field name="m[n][2]" description="Mn2" type="Real(10.6)" start="21" end="30"/>
+        <field name="m[n][3]" description="Mn3" type="Real(10.6)" start="31" end="40"/>
+        <field name="v[n]" description="Vn" type="Real(10.5)" start="46" end="55"/>
+        <field name="iGiven" description="1 if coordinates for the representations" type="Integer" start="60" end="60"/>
+    </record>
+
+    <record name="MODEL " description="Specification of model number for multiple structures in a single coordinate entry">
+        <field name="recName" description="Record name" type="String" start="1" end="6"/>
+        <field name="serial" description="Model serial number" type="Integer" start="11" end="14"/>
+    </record>
+
+    <record name="ATOM  " description="Atomic coordinate records for standard groups">
+        <field name="recName" description="Record name" type="String" start="1" end="6"/>
+        <field name="serial" description="Atom serial number" type="Integer" start="11" end="14"/>
+        <field name="name" description="Atom name" type="Atom" start="13" end="16"/>
+        <field name="altLoc" description="Alternate location indicator" type="Character" start="17" end="17"/>
+        <field name="resName" description="Residue name" type="Residue name" start="18" end="20"/>
+        <field name="chainID" description="Chain identifier" type="Character" start="22" end="22"/>
+        <field name="resSeq" description="Residue sequence number" type="Integer" start="23" end="26"/>
+        <field name="iCode" description="Code for insertion of residues" type="AChar" start="27" end="27"/>
+        <field name="x" description="Orthogonal coordinates for X in Angstroms" type="Real(8.3)" start="31" end="38"/>
+        <field name="y" description="Orthogonal coordinates for Y in Angstroms" type="Real(8.3)" start="39" end="46"/>
+        <field name="z" description="Orthogonal coordinates for Z in Angstroms" type="Real(8.3)" start="47" end="54"/>
+        <field name="occupancy" description="Occupancy" type="Real(6.2)" start="55" end="60"/>
+        <field name="tempFactor" description="Temperature factor" type="Real(6.2)" start="61" end="66"/>
+        <field name="element" description="Element symbol, right-justified" type="LString(2)" start="77" end="78"/>
+        <field name="charge" description="Charge on the atom" type="LString(2)" start="79" end="80"/>
+    </record>
+
+    <record name="ANISOU" description="Anisotropic temperature factors">
+        <field name="recName" description="Record name" type="String" start="1" end="6"/>
+        <field name="serial" description="Atom serial number" type="Integer" start="79" end="80"/>
+        <field name="name" description="Atom name" type="Atom" start="13" end="16"/>
+        <field name="altLoc" description="Alternate location indicator" type="Character" start="17" end="17"/>
+        <field name="resName" description="Residue name" type="Residue name" start="18" end="20"/>
+        <field name="chainID" description="Chain identifier" type="Character" start="22" end="22"/>
+        <field name="resSeq" description="Residue sequence number" type="Integer" start="23" end="26"/>
+        <field name="iCode" description="Insertion code" type="AChar" start="27" end="27"/>
+        <field name="u[0][0]" description="U(1,1)" type="Integer" start="29" end="35"/>
+        <field name="u[1][1]" description="U(2,2)" type="Integer" start="36" end="42"/>
+        <field name="u[2][2]" description="U(3,3)" type="Integer" start="43" end="49"/>
+        <field name="u[0][1]" description="U(1,2)" type="Integer" start="50" end="56"/>
+        <field name="u[0][2]" description="U(1,3)" type="Integer" start="57" end="63"/>
+        <field name="u[1][2]" description="U(2,3)" type="Integer" start="64" end="70"/>
+        <field name="element" description="Element symbol, right-justified" type="LString(2)" start="77" end="78"/>
+        <field name="charge" description="Charge on the atom" type="LString(2)" start="79" end="80"/>
+    </record>
+
+    <record name="TER   " description="Chain terminator">
+        <field name="recName" description="Record name" type="String" start="1" end="6"/>
+        <field name="serial" description="Serial number" type="Integer" start="79" end="80"/>
+        <field name="resName" description="Residue name" type="Residue name" start="18" end="20"/>
+        <field name="chainID" description="Chain identifier" type="Character" start="22" end="22"/>
+        <field name="resSeq" description="Residue sequence number" type="Integer" start="23" end="26"/>
+        <field name="iCode" description="Insertion code" type="AChar" start="27" end="27"/>
+    </record>
+
+    <record name="HETATM" description="Atomic coordinate records for heterogens">
+        <field name="recName" description="Record name" type="String" start="1" end="6"/>
+        <field name="serial" description="Atom serial number" type="Integer" start="27" end="27"/>
+        <field name="name" description="Atom name" type="Atom" start="13" end="16"/>
+        <field name="altLoc" description="Alternate location indicator" type="Character" start="17" end="17"/>
+        <field name="resName" description="Residue name" type="Residue name" start="18" end="20"/>
+        <field name="chainID" description="Chain identifier" type="Character" start="22" end="22"/>
+        <field name="resSeq" description="Residue sequence number" type="Integer" start="23" end="26"/>
+        <field name="iCode" description="Code for insertion of residues" type="AChar" start="27" end="27"/>
+        <field name="x" description="Orthogonal coordinates for X" type="Real(8.3)" start="31" end="38"/>
+        <field name="y" description="Orthogonal coordinates for Y" type="Real(8.3)" start="39" end="46"/>
+        <field name="z" description="Orthogonal coordinates for Z" type="Real(8.3)" start="47" end="54"/>
+        <field name="occupancy" description="Occupancy" type="Real(6.2)" start="55" end="60"/>
+        <field name="tempFactor" description="Temperature factor" type="Real(6.2)" start="61" end="66"/>
+        <field name="element" description="Element symbol; right-justified" type="LString(2)" start="77" end="78"/>
+        <field name="charge" description="Charge on the atom" type="LString(2)" start="79" end="80"/>
+    </record>
+
+    <record name="ENDMDL" description="End-of-model record for multiple structures in a single coordinate entry">
+        <field name="recName" description="Record name" type="String" start="1" end="6"/>
+    </record>
+
+    <record name="CONECT" description="Connectivity records">
+        <field name="recName" description="Record name" type="String" start="1" end="6"/>
+        <field name="serial" description="Atom serial number" type="Integer" start="79" end="80"/>
+        <field name="serial" description="Serial number of bonded atom" type="Integer" start="12" end="16"/>
+        <field name="serial" description="Serial number of bonded atom" type="Integer" start="17" end="21"/>
+        <field name="serial" description="Serial number of bonded atom" type="Integer" start="22" end="26"/>
+        <field name="serial" description="Serial number of bonded atom" type="Integer" start="27" end="31"/>
+    </record>
+
+    <record name="MASTER" description="Control record for bookkeeping">
+        <field name="recName" description="Record name" type="String" start="1" end="6"/>
+        <field name="numRemark" description="Number of REMARK records" type="Integer" start="11" end="15"/>
+        <field name="0" description="" type="Integer" start="16" end="20"/>
+        <field name="numHet" description="Number of HET records" type="Integer" start="21" end="25"/>
+        <field name="numHelix" description="Number of HELIX records" type="Integer" start="26" end="30"/>
+        <field name="numSheet" description="Number of SHEET records" type="Integer" start="31" end="35"/>
+        <field name="numTurn" description="deprecated" type="Integer" start="36" end="40"/>
+        <field name="numSite" description="Number of SITE records" type="Integer" start="41" end="45"/>
+        <field name="numXform" description="Number of coordinate transformation" type="Integer" start="46" end="50"/>
+        <field name="numCoord" description="Number of atomic coordinate records" type="Integer" start="51" end="55"/>
+        <field name="numTer" description="Number of TER records" type="Integer" start="56" end="60"/>
+        <field name="numConect" description="Number of CONECT records" type="Integer" start="61" end="65"/>
+        <field name="numSeq" description="Number of SEQRES records" type="Integer" start="66" end="70"/>
+    </record>
+
+    <record name="END   " description="Last record in the file">
+        <field name="recName" description="Record name" type="String" start="1" end="6"/>
+    </record>
+
+</rbfile>	

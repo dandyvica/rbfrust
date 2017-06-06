@@ -324,7 +324,7 @@ impl<T> Record<T> {
 /// Lists all field name and values from a Record.
 impl<T> fmt::Display for Record<T> {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        let s: Vec<_> = self.flist.iter().map(|f| format!("{}=\"{}\"", f.name, f.value())).collect();
+        let s: Vec<_> = self.flist.iter().map(|f| format!("{}", f)).collect();
         write!(f, "({})", s.join(","))
     }
 }
@@ -505,6 +505,9 @@ mod tests {
         assert_eq!(rec[2].value(), "CCCCCCCCCCCCCCCCCCCC");    
         assert_eq!(rec[3].value(), "DDDDDDDDDD");
         assert_eq!(vector_of!(rec, raw_value), vec!["AAAAAAAAAA", "BBBBBBBBBB", "CCCCCCCCCCCCCCCCCCCC", "DDDDDDDDDD"]);
+
+        // test display
+        assert_eq!(format!("{}", rec), "(FIELD1='AAAAAAAAAA',FIELD2='BBBBBBBBBB',FIELD3='CCCCCCCCCCCCCCCCCCCC',FIELD2='DDDDDDDDDD')");
 
         // line is over right length in chars
         let s3 = "AAAAAAAAAABBBBBBBBBBCCCCCCCCCCCCCCCCCCCCDDDDDDDDDDEEEEEEEEEEEEEEEE";

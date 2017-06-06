@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rbfile
+    xmlns="http://www.w3schools.com"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.w3schools.com rbf.xsd"
+>
+
+    <meta version="3.30" description="Protein Data Bank"/>
+
+	<fieldtype name="A" type="string"/>
+	<fieldtype name="N" type="decimal"/>   
+
+
+</rbfile>	

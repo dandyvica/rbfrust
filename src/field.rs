@@ -192,15 +192,10 @@ impl Field {
     }
 }
 
-// implement display trait
+/// Implements **Display** trait: just print out field name and field value
 impl fmt::Display for Field {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(
-            f, 
-            "name: <{}>, description: <{}>, length: <{}>, field type: {}, raw_value=<{}>, str_value=<{}>, offset_from_origin=<{}>, index=<{}>, lower_offset=<{}>, upper_offset=<{}>", 
-            self.name, self.description, self.length, self.ftype, self.raw_value, self.str_value, 
-            self.offset_from_origin, self.index, self.lower_offset, self.upper_offset
-        )
+        write!(f, "{}='{}'", self.name, self.value())
     }
 }
 
@@ -229,14 +224,34 @@ mod tests {
     use fieldtype::FieldDataType;
     use field::Field;
 
+    fn test_field_value(f: &mut Field) {
+        // utf-8
+        f.set_value("  αβ  ");    
+        assert_eq!(f.value(), "αβ");
+
+        // ascii
+        f.set_value("  XX  ");    
+        assert_eq!(f.value(), "XX");        
+
+        let other_f = f.clone();
+        assert_eq!(other_f.value(), "XX");
+
+    }
+
     #[test]
     fn field_cons_offset() {
         let ft = Rc::new(FieldDataType::new("I", "integer"));
-        let f1 = Field::from_offset("F1", "Description for field 1", &ft, 5, 10);     
+        let mut f1 = Field::from_offset("F1", "Description for field 1", &ft, 5, 10);     
         
         assert_eq!(&f1.name, "F1");
         assert_eq!(&f1.description, "Description for field 1");    
         assert_eq!(f1.length, 6);
+
+        test_field_value(&mut f1);
+
+        // test display
+        assert_eq!(format!("{}", f1), "F1='XX'");
+    
     }
 
     #[test]
@@ -248,16 +263,11 @@ mod tests {
         assert_eq!(&f1.description, "Description for field 1");    
         assert_eq!(f1.length, 10);
 
-        // utf-8
-        f1.set_value("  αβ  ");    
-        assert_eq!(f1.value(), "αβ");
+        test_field_value(&mut f1);
 
-        // ascii
-        f1.set_value("  XX  ");    
-        assert_eq!(f1.value(), "XX");        
+        // test display
+        assert_eq!(format!("{}", f1), "F1='XX'");
 
-        let other_f1 = f1.clone();
-        assert_eq!(other_f1.value(), "XX");  
     }
 
     #[test]

@@ -1,0 +1,91 @@
+CRYST1                 Unit cell parameters, space group, and Z. 
+ 
+END                    Last record in the file. 
+ 
+HEADER                 First line of the entry, contains PDB ID code, classification, and date of deposition. 
+ 
+NUMMDL                 Number of models. 
+ 
+MASTER                 Control record for bookkeeping. 
+ 
+ORIGXn                 Transformation from orthogonal coordinates to the submitted coordinates (n = 1, 2, or 3). 
+ 
+SCALEn                 Transformation from orthogonal coordinates to fractional crystallographic coordinates (n = 1, 2, or 3). 
+ 
+AUTHOR                 List of contributors. 
+ 
+CAVEAT                 Severe error indicator. 
+ 
+COMPND                 Description of macromolecular contents of the entry. 
+ 
+EXPDTA                 Experimental technique used for the structure determination. 
+ 
+MDLTYP                 Contains additional annotation pertinent to the coordinates 
+ 
+ 
+KEYWDS                 List of keywords describing the macromolecule. 
+ 
+OBSLTE                 Statement that the entry has been removed from distribution and list of the ID code(s) which replaced it. 
+ 
+SOURCE                 Biological source of macromolecules in the entry. 
+ 
+SPLIT                  List of PDB entries that compose a larger  macromolecular complexes. 
+ 
+SPRSDE                 List of entries obsoleted from public release and replaced by current entry. 
+
+TITLE                  Description of the experiment represented in the entry. 
+ 
+ 
+ANISOU                 Anisotropic temperature factors. 
+ 
+ATOM                   Atomic coordinate records for standard groups. 
+ 
+CISPEP                 Identification of peptide residues in cis conformation. 
+ 
+CONECT                 Connectivity records. 
+ 
+DBREF                  Reference to the entry in the sequence database(s). 
+DBREF1                 Reference to the entry in the sequence database(s). 
+DBREF2                 Reference to the entry in the sequence database(s). 
+ 
+HELIX                  Identification of helical substructures. 
+ 
+HET                    Identification of non-standard groups heterogens). 
+ 
+HETATM                 Atomic coordinate records for heterogens. 
+ 
+LINK                   Identification of inter-residue bonds. 
+ 
+MODRES                 Identification of modifications to standard residues. 
+ 
+MTRIXn                 Transformations expressing non-crystallographic symmetry (n = 1, 2, or 3). There may be multiple sets of these records. 
+ 
+REVDAT                 Revision date and related information. 
+ 
+SEQADV                 Identification of conflicts between PDB and the named   sequence database. 
+ 
+SHEET                  Identification of sheet substructures. 
+ 
+SSBOND                 Identification of disulfide bonds. 
+ 
+
+FORMUL                 Chemical formula of non-standard groups. 
+ 
+HETNAM                 Compound name of the heterogens. 
+ 
+HETSYN                 Synonymous compound names for heterogens. 
+ 
+SEQRES                 Primary sequence of backbone residues. 
+ 
+SITE                   Identification of groups comprising important entity sites. 
+ 
+ENDMDL                 End-of-model record for multiple structures in a single coordinate entry. 
+ 
+MODEL                  Specification of model number for multiple structures in a single coordinate entry. 
+ 
+TER                    Chain terminator. 
+ 
+JRNL                   Literature citation that defines the coordinate set. 
+ 
+REMARK                 General remarks; they can be structured or free form. 
+

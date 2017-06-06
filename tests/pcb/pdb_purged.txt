@@ -1,0 +1,542 @@
+COLUMNS       DATA TYPE     FIELD             DEFINITION 
+ 1 -  6       Record name   "HEADER" 
+11 - 50       String(40)    classification    Classifies the molecule(s). 
+51 - 59       Date          depDate           Deposition date. This is the date the 
+63 - 66       IDcode        idCode            This identifier is unique within the 
+COLUMNS       DATA TYPE     FIELD         DEFINITION 
+ 1 -  6       Record name   "OBSLTE" 
+ 9 - 10       Continuation  continuation  Allows concatenation of multiple records 
+12 - 20       Date          repDate       Date that this entry was replaced. 
+22 - 25       IDcode        idCode        ID code of this entry. 
+32 - 35       IDcode        rIdCode       ID code of entry that replaced this one. 
+37 - 40       IDcode        rIdCode       ID code of entry that replaced this one. 
+42 - 45       IDcode        rIdCode       ID code of entry that replaced this one. 
+47 - 50       IDcode        rIdCode       ID code of entry that replaced this one. 
+52 - 55       IDcode        rIdCode       ID code of entry that replaced this one. 
+57 - 60       IDcode        rIdCode       ID code of entry that replaced this one. 
+62 - 65       IDcode        rIdCode       ID code of entry that replaced this one. 
+67 - 70       IDcode        rIdCode       ID code of entry that replaced this one. 
+72 - 75       IDcode        rIdCode       ID code of entry that replaced this one. 
+COLUMNS       DATA TYPE     FIELD         DEFINITION 
+ 1 -  6       Record name   "TITLE " 
+ 9 - 10       Continuation  continuation  Allows concatenation of multiple records. 
+11 - 80       String        title         Title of the experiment. 
+COLUMNS       DATA TYPE     FIELD         DEFINITION 
+ 1 -  6       Record name   "SPLIT " 
+ 9 - 10       Continuation  continuation  Allows concatenation of multiple records. 
+12 - 15       IDcode        idCode        ID code of related entry. 
+17 - 20       IDcode        idCode        ID code of related entry. 
+22 - 25       IDcode        idCode        ID code of related entry. 
+27 – 30       IDcode        idCode        ID code of related entry. 
+32 - 35       IDcode        idCode        ID code of related entry. 
+37 - 40       IDcode        idCode        ID code of related entry. 
+42 - 45       IDcode        idCode        ID code of related entry. 
+47 - 50       IDcode        idCode        ID code of related entry. 
+52 - 55       IDcode        idCode        ID code of related entry. 
+57 - 60       IDcode        idCode        ID code of related entry. 
+62 - 65       IDcode        idCode        ID code of related entry. 
+67 - 70       IDcode        idCode        ID code of related entry. 
+72 - 75       IDcode        idCode        ID code of related entry. 
+77 - 80       IDcode        idCode        ID code of related entry. 
+COLUMNS       DATA TYPE     FIELD          DEFINITION 
+ 1 - 6        Record name   "CAVEAT" 
+ 9 - 10       Continuation  continuation   Allows concatenation of multiple records. 
+12 - 15       IDcode        idCode         PDB ID code of this entry. 
+20 - 79       String        comment        Free text giving the reason for the CAVEAT. 
+COLUMNS       DATA TYPE      FIELD         DEFINITION  
+ 1 -  6       Record name    "COMPND"    
+ 8 - 10       Continuation   continuation  Allows concatenation of multiple records. 
+11 - 80       Specification  compound      Description of the molecular components. 
+COLUMNS      DATA TYPE     FIELD          DEFINITION                         
+ 1 -  6      Record name    "SOURCE"        
+ 8 - 10      Continuation   continuation  Allows concatenation of multiple records. 
+11 - 79      Specification  srcName       Identifies the source of the 
+COLUMNS       DATA TYPE     FIELD         DEFINITION   
+ 1 -  6       Record name   "KEYWDS"   
+ 9 - 10       Continuation  continuation  Allows concatenation of records if necessary. 
+11 - 79       List          keywds        Comma-separated list of keywords relevant 
+COLUMNS       DATA TYPE     FIELD         DEFINITION     
+ 1 -  6       Record name   "EXPDTA"    
+ 9 - 10       Continuation  continuation  Allows concatenation of multiple records. 
+11 - 79       SList         technique     The experimental technique(s) with   
+COLUMNS      DATA TYPE      FIELD         DEFINITION                            
+ 1 -  6      Record name    "NUMMDL"                                              
+11 - 14      Integer        modelNumber   Number of models.    
+COLUMNS      DATA TYPE      FIELD         DEFINITION                            
+ 1 -  6      Record name    "MDLTYP"                                              
+ 9 - 10      Continuation   continuation  Allows concatenation of multiple records. 
+11 - 80      SList          comment       Free Text providing additional structural  
+COLUMNS      DATA TYPE      FIELD         DEFINITION                            
+ 1 -  6      Record name    "AUTHOR"                                              
+ 9 - 10      Continuation   continuation  Allows concatenation of multiple records. 
+11 - 79      List           authorList    List of the author names, separated     
+COLUMNS       DATA TYPE     FIELD         DEFINITION                              
+ 1 -  6       Record name   "REVDAT"                                              
+ 8 - 10       Integer       modNum        Modification number.                    
+11 - 12       Continuation  continuation  Allows concatenation of multiple records. 
+14 - 22       Date          modDate       Date of modification (or release for    
+24 - 27       IDCode        modId         ID code of this entry. This is not repeated 
+32            Integer       modType       An integer identifying the type of     
+40 - 45       LString(6)    record        Modification detail.  
+47 - 52       LString(6)    record        Modification detail.  
+54 - 59       LString(6)    record        Modification detail.  
+61 - 66       LString(6)    record        Modification detail. 
+COLUMNS       DATA TYPE     FIELD         DEFINITION                            
+ 1 -  6       Record name   "SPRSDE"                                              
+ 9 - 10       Continuation  continuation  Allows for multiple ID codes.           
+12 - 20       Date          sprsdeDate    Date this entry superseded the listed   
+22 - 25       IDcode        idCode        ID code of this entry. This field is not 
+32 - 35       IDcode        sIdCode       ID code of a superseded entry.          
+37 - 40       IDcode        sIdCode       ID code of a superseded entry.          
+42 - 45       IDcode        sIdCode       ID code of a superseded entry.          
+47 - 50       IDcode        sIdCode       ID code of a superseded entry.          
+52 - 55       IDcode        sIdCode       ID code of a superseded entry.          
+57 - 60       IDcode        sIdCode       ID code of a superseded entry.          
+62 - 65       IDcode        sIdCode       ID code of a superseded entry.          
+67 - 70       IDcode        sIdCode       ID code of a superseded entry.          
+72 - 75       IDcode        sIdCode       ID code of a superseded entry.          
+COLUMNS       DATA TYPE     FIELD         DEFINITION                   
+ 1 -  6       Record name   "JRNL  "                                   
+13 - 79       LString        text         See Details below.            
+COLUMNS       DATA TYPE     FIELD          DEFINITION                          
+ 1 -  6       Record name   "REMARK"                                           
+10            LString(1)    "1"                                                
+13 - 16       LString(4)    "AUTH"         Appears on all continuation records. 
+17 - 18       Continuation  continuation   Allows a long list of authors.      
+20 - 79       List          authorList     List of the authors.                
+COLUMNS       DATA TYPE     FIELD          DEFINITION                          
+ 1 -  6       Record name   "REMARK"                                           
+10            LString(1)    "1"                                                
+13 - 16       LString(4)    "TITL"         Appears on all continuation records. 
+17 - 18       Continuation  continuation   Permits long titles.                
+20 - 79       LString       title          Title of the article.  
+COLUMNS       DATA TYPE     FIELD          DEFINITION                          
+ 1 -  6       Record name   "REMARK"                                           
+10            LString(1)    "1"                                                
+13 - 16       LString(4)    "TITL"         Appears on all continuation records. 
+17 - 18       Continuation  continuation   Permits long titles.                
+20 - 79       LString       title          Title of the article. 
+COLUMNS       DATA TYPE     FIELD           DEFINITION 
+ 1 -  6       Record name   "JRNL  " 
+13 - 16       LString(3)    "REF" 
+20 - 34       LString(15)   tbp             TO BE PUBLISHED
+COLUMNS       DATA TYPE     FIELD          DEFINITION 
+ 1 -  6       Record name   "JRNL  " 
+13 - 16       LString(3)    "REF " 
+17 - 18       Continuation  continuation   Allows long publication names. 
+20 - 47       LString       pubName        Name of the publication including section 
+50 - 51       LString(2)    "V."           Appears in the first sub-record only, 
+52 - 55       String        volume         Right-justified blank-filled volume 
+57 - 61       String        page           First page of the article; appears in  
+63 - 66       Integer       year           Year of publication; first sub-record only. 
+COLUMNS       DATA TYPE     FIELD          DEFINITION 
+ 1 -  6       Record name   "JRNL  " 
+13 - 16       LString(4)    "PUBL" 
+17 - 18       Continuation  continuation   Allows long publisher and place names. 
+20 - 70       LString       pub            City of publication and name of the 
+COLUMNS       DATA TYPE     FIELD          DEFINITION 
+ 1 -  6       Record name   "JRNL  " 
+13 - 16       LString(4)    "REFN" 
+COLUMNS       DATA TYPE     FIELD          DEFINITION 
+ 1 -  6       Record name   "JRNL  " 
+13 - 16       LString(4)    "REFN" 
+36 - 39       LString(4)    "ISSN"         International Standard Serial Number or  
+41 - 65       LString       issn           ISSN number (final digit may be a 
+COLUMNS       DATA TYPE     FIELD          DEFINITION 
+ 1 -  6       Record name   "JRNL  " 
+13 - 16       LString(4)    "PMID" 
+20 – 79       Integer       continuation   unique PubMed identifier number assigned to  
+COLUMNS       DATA TYPE     FIELD          DEFINITION 
+ 1 -  6       Record name   "JRNL  " 
+13 - 16       LString(4)    "DOI " 
+20 – 79       LString       continuation   Unique DOI assigned to the publication 
+COLUMNS       DATA TYPE     FIELD         DEFINITION 
+ 1 -  6       Record name   "REMARK" 
+ 8 - 10       Integer       remarkNum     Remark number. It is not an error for 
+12 - 79       LString       empty         Left as white space in first line 
+COLUMNS       DATA TYPE     FIELD          DEFINITION 
+ 1 -  6       Record name   "REMARK" 
+10            LString(1)    "1" 
+12 - 20       LString(9)    "REFERENCE" 
+22 - 70       Integer       refNum         Reference number. Starts with 1 
+COLUMNS       DATA TYPE     FIELD           DEFINITION 
+ 1 -  6       Record name   "REMARK" 
+10            LString(1)    "1" 
+13 - 16       LString(4)    "AUTH"          Appears on all continuation records. 
+17 - 18       Continuation  continuation    Allows a long list of authors. 
+20 - 79       List          authorList      List of the authors. 
+COLUMNS       DATA TYPE     FIELD           DEFINITION 
+ 1 -  6       Record name   "REMARK" 
+10            LString(1)    "1" 
+13 - 16       LString(4)    "TITL"          Appears on all continuation records. 
+17 - 18       Continuation  continuation    Permits long titles. 
+20 - 79       LString       title           Title of the article. 
+COLUMNS       DATA TYPE      FIELD          DEFINITION 
+ 1 -  6       Record name    "REMARK" 
+10            LString(1)     "1" 
+13 - 16       LString(4)     "TITL"         Appears on all continuation records. 
+17 - 18       Continuation   continuation   Permits long list of editors. 
+20 - 79       LString        editorList     List of the editors. 
+COLUMNS       DATA TYPE     FIELD           DEFINITION 
+ 1 -  6       Record name   "REMARK" 
+10            LString(1)    "1" 
+13 - 16       LString(3)    "REF" 
+20 - 34       LString(15)   tbp             TO BE PUBLISHED
+COLUMNS       DATA TYPE     FIELD          DEFINITION 
+ 1 -  6       Record name   "REMARK" 
+10            LString(1)    "1" 
+13 - 16       LString(3)    "REF" 
+17 - 18       Continuation  continuation   Permits long publication names.  
+20 - 47       LString       pubName        Name of the publication including section 
+50 - 51       LString(2)    "V."           Appears in the first record only, and only 
+52 - 55       String        volume         Right-justified blank-filled volume 
+57 - 61       String        page           First page of the article; appears in the 
+63 - 66       Integer       year           First record year of publication. 
+COLUMNS       DATA TYPE     FIELD          DEFINITION 
+ 1 -  6       Record name   "REMARK" 
+10            LString(1)    "1" 
+13 - 16       LString(4)    "PUBL" 
+17 - 18       Continuation  continuation   Permits long publisher and city  
+20 - 70       LString       pub            Name of the publisher and city of  
+COLUMNS       DATA TYPE     FIELD          DEFINITION 
+ 1 -  6       Record name   "REMARK" 
+10            LString(1)    "1" 
+13 - 16       LString(4)    "REFN" 
+COLUMNS       DATA TYPE     FIELD          DEFINITION 
+ 1 -  6       Record name   "REMARK" 
+10            LString(1)    "1" 
+13 - 16       LString(4)    "REFN" 
+36 - 39       LString(4)    "ISSN" or      International Standard Serial Number or 
+41 - 65       LString       issn           ISSN number. 
+COLUMNS       DATA TYPE     FIELD          DEFINITION 
+ 1 -  6       Record name   "JRNL  " 
+13 - 16       LString(4)    "PMID" 
+20 – 79       Integer       continuation   unique PubMed identifier number assigned  
+COLUMNS       DATA TYPE     FIELD          DEFINITION 
+ 1 -  6       Record name   "JRNL  " 
+13 - 16       LString(4)    "DOI " 
+20 – 79       LString       continuation   Unique DOI assigned to the  
+COLUMNS       DATA TYPE     FIELD          DEFINITION 
+ 1 - 6        Record name   "REMARK" 
+10            LString(1)    "2" 
+12 - 22       LString(11)   "RESOLUTION." 
+24 - 30       Real(7.2)     resolution     Resolution. 
+32 - 41       LString(10)   "ANGSTROMS." 
+COLUMNS       DATA TYPE     FIELD          DEFINITION 
+ 1 - 6        Record name   "REMARK" 
+10            LString(1)    "2" 
+12 - 38       LString(28)   resolution     RESOLUTION. NOT APPLICABLE
+COLUMNS       DATA TYPE     FIELD              DEFINITION 
+ 1 -  6       Record name   "DBREF " 
+ 8 - 11       IDcode        idCode             ID code of this entry. 
+13            Character     chainID            Chain identifier. 
+15 - 18       Integer       seqBegin           Initial sequence number of the 
+19            AChar         insertBegin        Initial insertion code of the  
+21 - 24       Integer       seqEnd             Ending sequence number of the 
+25            AChar         insertEnd          Ending insertion code of the 
+27 - 32       LString       database           Sequence database name.  
+34 - 41       LString       dbAccession        Sequence database accession code. 
+43 - 54       LString       dbIdCode           Sequence database identification code. 
+56 - 60       Integer       dbseqBegin         Initial sequence number of the 
+61            AChar         idbnsBeg           Insertion code of initial residue of  
+63 - 67       Integer       dbseqEnd           Ending sequence number of the 
+68            AChar         dbinsEnd           Insertion code of the ending residue of 
+COLUMNS       DATA TYPE     FIELD         DEFINITION 
+ 1 -  6       Record name   "DBREF1" 
+ 8 - 11       IDcode        idCode        ID code of this entry. 
+13            Character     chainID       Chain identifier. 
+15 - 18       Integer       seqBegin      Initial sequence number of the 
+19            AChar         insertBegin   Initial insertion code of the  
+21 - 24       Integer       seqEnd        Ending sequence number of the 
+25            AChar         insertEnd     Ending insertion code of the 
+27 - 32       LString       database      Sequence database name.  
+48 - 67       LString       dbIdCode      Sequence database identification code,  
+COLUMNS       DATA TYPE     FIELD         DEFINITION 
+ 1 - 6        Record name   "DBREF2" 
+ 8 - 11       IDcode        idCode        ID code of this entry. 
+13            Character     chainID       Chain identifier. 
+19 - 40       LString       dbAccession   Sequence database accession code,  
+46 - 55       Integer       seqBegin      Initial sequence number of the 
+58 - 67       Integer       seqEnd        Ending sequence number of the 
+COLUMNS       DATA TYPE     FIELD         DEFINITION 
+ 1 -  6       Record name   "SEQADV" 
+ 8 - 11       IDcode        idCode        ID code of this entry. 
+13 - 15       Residue name  resName       Name of the PDB residue in conflict. 
+17            Character     chainID       PDB chain identifier. 
+19 - 22       Integer       seqNum        PDB sequence number. 
+23            AChar         iCode         PDB insertion code. 
+25 - 28       LString       database 
+30 - 38       LString       dbAccession   Sequence database accession number. 
+40 - 42       Residue name  dbRes         Sequence database residue name. 
+44 - 48       Integer       dbSeq         Sequence database sequence number. 
+50 - 70       LString       conflict      Conflict comment. 
+COLUMNS       DATA TYPE      FIELD        DEFINITION 
+ 1 -  6       Record name    "SEQRES" 
+ 8 - 10       Integer        serNum       Serial number of the SEQRES record for the 
+12            Character      chainID      Chain identifier. This may be any single 
+14 - 17       Integer        numRes       Number of residues in the chain. 
+20 - 22       Residue name   resName      Residue name. 
+24 - 26       Residue name   resName      Residue name. 
+28 - 30       Residue name   resName      Residue name. 
+32 - 34       Residue name   resName      Residue name. 
+36 - 38       Residue name   resName      Residue name. 
+40 - 42       Residue name   resName      Residue name. 
+44 - 46       Residue name   resName      Residue name. 
+48 - 50       Residue name   resName      Residue name. 
+52 - 54       Residue name   resName      Residue name. 
+56 - 58       Residue name   resName      Residue name. 
+60 - 62       Residue name   resName      Residue name. 
+64 - 66       Residue name   resName      Residue name. 
+68 - 70       Residue name   resName      Residue name. 
+COLUMNS       DATA TYPE     FIELD       DEFINITION 
+ 1 -  6       Record name   "MODRES" 
+ 8 - 11       IDcode        idCode      ID code of this entry. 
+13 - 15       Residue name  resName     Residue name used in this entry. 
+17            Character     chainID     Chain identifier. 
+19 - 22       Integer       seqNum      Sequence number. 
+23            AChar         iCode       Insertion code. 
+25 - 27       Residue name  stdRes      Standard residue name. 
+30 - 70       String        comment     Description of the residue modification. 
+COLUMNS       DATA TYPE     FIELD         DEFINITION 
+ 1 -  6       Record name   "HET   " 
+ 8 - 10       LString(3)    hetID         Het identifier, right-justified. 
+13            Character     ChainID       Chain identifier. 
+14 - 17       Integer       seqNum        Sequence number. 
+18            AChar         iCode         Insertion code. 
+21 - 25       Integer       numHetAtoms   Number of HETATM records for the group 
+31 - 70       String        text          Text describing Het group. 
+COLUMNS       DATA TYPE     FIELD          DEFINITION 
+ 1 -  6       Record name   "HETNAM" 
+ 9 - 10       Continuation  continuation   Allows concatenation of multiple records. 
+12 - 14       LString(3)    hetID          Het identifier, right-justified. 
+16 - 70       String        text           Chemical name. 
+COLUMNS       DATA TYPE     FIELD          DEFINITION 
+ 1 -  6       Record name   "HETSYN" 
+ 9 - 10       Continuation  continuation   Allows concatenation of multiple records. 
+12 - 14       LString(3)    hetID          Het identifier, right-justified. 
+16 - 70       SList         hetSynonyms    List of synonyms. 
+COLUMNS        DATA TYPE     FIELD         DEFINITION 
+ 1 -  6        Record name   "FORMUL" 
+ 9 - 10        Integer       compNum       Component number. 
+13 - 15        LString(3)    hetID         Het identifier. 
+17 - 18        Integer       continuation  Continuation number. 
+19             Character     asterisk      '*' for water. 
+20 - 70        String        text          Chemical formula. 
+COLUMNS        DATA TYPE     FIELD         DEFINITION 
+ 1 -  6        Record name   "HELIX " 
+ 8 - 10        Integer       serNum        Serial number of the helix. This starts 
+12 - 14        LString(3)    helixID       Helix identifier. In addition to a serial 
+16 - 18        Residue name  initResName   Name of the initial residue. 
+20             Character     initChainID   Chain identifier for the chain containing 
+22 - 25        Integer       initSeqNum    Sequence number of the initial residue. 
+26             AChar         initICode     Insertion code of the initial residue. 
+28 - 30        Residue name  endResName    Name of the terminal residue of the helix. 
+32             Character     endChainID    Chain identifier for the chain containing 
+34 - 37        Integer       endSeqNum     Sequence number of the terminal residue. 
+38             AChar         endICode      Insertion code of the terminal residue. 
+39 - 40        Integer       helixClass    Helix class (see below). 
+41 - 70        String        comment       Comment about this helix. 
+72 - 76        Integer       length        Length of this helix. 
+COLUMNS       DATA TYPE     FIELD          DEFINITION 
+ 1 -  6       Record name   "SHEET " 
+ 8 - 10       Integer       strand         Strand number which starts at 1 for each 
+12 - 14       LString(3)    sheetID        Sheet identifier. 
+15 - 16       Integer       numStrands     Number of strands in sheet. 
+18 - 20       Residue name  initResName    Residue name of initial residue. 
+22            Character     initChainID    Chain identifier of initial residue  
+23 - 26       Integer       initSeqNum     Sequence number of initial residue 
+27            AChar         initICode      Insertion code of initial residue 
+29 - 31       Residue name  endResName     Residue name of terminal residue. 
+33            Character     endChainID     Chain identifier of terminal residue. 
+34 - 37       Integer       endSeqNum      Sequence number of terminal residue. 
+38            AChar         endICode       Insertion code of terminal residue. 
+39 - 40       Integer       sense          Sense of strand with respect to previous 
+42 - 45       Atom          curAtom        Registration. Atom name in current strand. 
+46 - 48       Residue name  curResName     Registration. Residue name in current  
+50            Character     curChainId     Registration. Chain identifier in 
+51 - 54       Integer       curResSeq      Registration. Residue sequence number 
+55            AChar         curICode       Registration. Insertion code in 
+57 - 60       Atom          prevAtom       Registration. Atom name in previous strand. 
+61 - 63        Residue name  prevResName   Registration. Residue name in 
+65             Character     prevChainId   Registration. Chain identifier in 
+66 - 69        Integer       prevResSeq    Registration. Residue sequence number 
+70             AChar         prevICode     Registration. Insertion code in 
+COLUMNS        DATA TYPE      FIELD            DEFINITION 
+ 1 -  6        Record name    "SSBOND" 
+ 8 - 10        Integer        serNum           Serial number. 
+12 - 14        LString(3)     "CYS"            Residue name. 
+16             Character      chainID1         Chain identifier. 
+18 - 21        Integer        seqNum1          Residue sequence number. 
+22             AChar          icode1           Insertion code. 
+26 - 28        LString(3)     "CYS"            Residue name. 
+30             Character      chainID2         Chain identifier. 
+32 - 35        Integer        seqNum2          Residue sequence number. 
+36             AChar          icode2           Insertion code. 
+60 - 65        SymOP          sym1             Symmetry operator for residue 1. 
+67 - 72        SymOP          sym2             Symmetry operator for residue 2. 
+74 – 78        Real(5.2)      Length           Disulfide bond distance 
+COLUMNS         DATA TYPE      FIELD           DEFINITION 
+ 1 -  6         Record name    "LINK  " 
+13 - 16         Atom           name1           Atom name. 
+17              Character      altLoc1         Alternate location indicator. 
+18 - 20         Residue name   resName1        Residue name. 
+22              Character      chainID1        Chain identifier. 
+23 - 26         Integer        resSeq1         Residue sequence number. 
+27              AChar          iCode1          Insertion code. 
+43 - 46         Atom           name2           Atom name. 
+47              Character      altLoc2         Alternate location indicator. 
+48 - 50         Residue name   resName2        Residue name. 
+52              Character      chainID2        Chain identifier. 
+53 - 56         Integer        resSeq2         Residue sequence number. 
+57              AChar          iCode2          Insertion code. 
+60 - 65         SymOP          sym1            Symmetry operator atom 1. 
+67 - 72         SymOP          sym2            Symmetry operator atom 2. 
+74 – 78         Real(5.2)      Length          Link distance 
+COLUMNS       DATA TYPE     FIELD         DEFINITION 
+ 1 -  6       Record name   "CISPEP" 
+ 8 - 10       Integer       serNum        Record serial number. 
+12 - 14       LString(3)    pep1          Residue name. 
+16            Character     chainID1      Chain identifier. 
+18 - 21       Integer       seqNum1       Residue sequence number. 
+22            AChar         icode1        Insertion code. 
+26 - 28       LString(3)    pep2          Residue name. 
+30            Character     chainID2      Chain identifier. 
+32 - 35       Integer       seqNum2       Residue sequence number. 
+36            AChar         icode2        Insertion code. 
+44 - 46       Integer       modNum        Identifies the specific model. 
+54 - 59       Real(6.2)     measure       Angle measurement in degrees. 
+COLUMNS       DATA TYPE     FIELD         DEFINITION 
+ 1 -  6       Record name   "SITE  " 
+ 8 - 10       Integer       seqNum        Sequence number. 
+12 - 14       LString(3)    siteID        Site name. 
+16 - 17       Integer       numRes        Number of residues that compose the site. 
+19 - 21       Residue name  resName1      Residue name for first residue that  
+23            Character     chainID1      Chain identifier for first residue of site. 
+24 - 27       Integer       seq1          Residue sequence number for first residue 
+28            AChar         iCode1        Insertion code for first residue of the  
+30 - 32       Residue name  resName2      Residue name for second residue that  
+34            Character     chainID2      Chain identifier for second residue of 
+35 - 38       Integer       seq2          Residue sequence number for second 
+39            AChar         iCode2        Insertion code for second residue 
+41 - 43       Residue name  resName3      Residue name for third residue that  
+45            Character     chainID3      Chain identifier for third residue 
+46 - 49       Integer       seq3          Residue sequence number for third 
+50            AChar         iCode3        Insertion code for third residue 
+52 - 54       Residue name  resName4      Residue name for fourth residue that  
+56            Character     chainID4      Chain identifier for fourth residue 
+57 - 60       Integer       seq4          Residue sequence number for fourth 
+61            AChar         iCode4        Insertion code for fourth residue 
+COLUMNS       DATA TYPE     FIELD          DEFINITION 
+ 1 -  6       Record name   "CRYST1" 
+ 7 - 15       Real(9.3)     a              a (Angstroms). 
+16 - 24       Real(9.3)     b              b (Angstroms). 
+25 - 33       Real(9.3)     c              c (Angstroms). 
+34 - 40       Real(7.2)     alpha          alpha (degrees). 
+41 - 47       Real(7.2)     beta           beta (degrees). 
+48 - 54       Real(7.2)     gamma          gamma (degrees). 
+56 - 66       LString       sGroup         Space group. 
+67 - 70       Integer       z              Z value. 
+COLUMNS        DATA TYPE     FIELD         DEFINITION 
+ 1 -  6        Record name   "ORIGXn"      n=1, 2, or 3 
+11 - 20        Real(10.6)    o[n][1]       On1 
+21 - 30        Real(10.6)    o[n][2]       On2 
+31 - 40        Real(10.6)    o[n][3]       On3 
+46 - 55        Real(10.5)    t[n]          Tn 
+COLUMNS        DATA TYPE     FIELD              DEFINITION 
+ 1 -  6        Record name   "SCALEn"           n=1, 2, or 3 
+11 - 20        Real(10.6)    s[n][1]            Sn1 
+21 - 30        Real(10.6)    s[n][2]            Sn2 
+31 - 40        Real(10.6)    s[n][3]            Sn3 
+46 - 55        Real(10.5)    u[n]               Un 
+COLUMNS       DATA TYPE     FIELD         DEFINITION 
+ 1 - 6        Record name   "MTRIXn"      n=1, 2, or 3 
+ 8 - 10       Integer       serial        Serial number. 
+11 - 20       Real(10.6)    m[n][1]       Mn1 
+21 - 30       Real(10.6)    m[n][2]       Mn2 
+31 - 40       Real(10.6)    m[n][3]       Mn3 
+46 - 55       Real(10.5)    v[n]          Vn 
+60            Integer       iGiven        1 if coordinates for the representations 
+COLUMNS       DATA TYPE     FIELD          DEFINITION 
+ 1 - 6        Record name   "MODEL " 
+11 - 14       Integer       serial         Model serial number. 
+COLUMNS        DATA TYPE     FIELD        DEFINITION 
+ 1 -  6        Record name   "ATOM  " 
+ 7 - 11        Integer       serial       Atom serial number. 
+13 - 16        Atom          name         Atom name. 
+17             Character     altLoc       Alternate location indicator. 
+18 - 20        Residue name  resName      Residue name. 
+22             Character     chainID      Chain identifier. 
+23 - 26        Integer       resSeq       Residue sequence number. 
+27             AChar         iCode        Code for insertion of residues. 
+31 - 38        Real(8.3)     x            Orthogonal coordinates for X in Angstroms. 
+39 - 46        Real(8.3)     y            Orthogonal coordinates for Y in Angstroms. 
+47 - 54        Real(8.3)     z            Orthogonal coordinates for Z in Angstroms. 
+55 - 60        Real(6.2)     occupancy    Occupancy. 
+61 - 66        Real(6.2)     tempFactor   Temperature factor. 
+77 - 78        LString(2)    element      Element symbol, right-justified. 
+79 - 80        LString(2)    charge       Charge on the atom. 
+COLUMNS       DATA TYPE     FIELD         DEFINITION 
+ 1 - 6        Record name   "ANISOU" 
+ 7 - 11       Integer       serial         Atom serial number. 
+13 - 16       Atom          name           Atom name. 
+17            Character     altLoc         Alternate location indicator 
+18 - 20       Residue name  resName        Residue name. 
+22            Character     chainID        Chain identifier. 
+23 - 26       Integer       resSeq         Residue sequence number. 
+27            AChar         iCode          Insertion code. 
+29 - 35       Integer       u[0][0]        U(1,1) 
+36 - 42       Integer       u[1][1]        U(2,2) 
+43 - 49       Integer       u[2][2]        U(3,3) 
+50 - 56       Integer       u[0][1]        U(1,2) 
+57 - 63       Integer       u[0][2]        U(1,3) 
+64 - 70       Integer       u[1][2]        U(2,3) 
+77 - 78       LString(2)    element        Element symbol, right-justified. 
+79 - 80       LString(2)    charge         Charge on the atom. 
+COLUMNS        DATA TYPE     FIELD           DEFINITION 
+ 1 -  6        Record name   "TER   " 
+ 7 - 11        Integer       serial          Serial number. 
+18 - 20        Residue name  resName         Residue name. 
+22             Character     chainID         Chain identifier. 
+23 - 26        Integer       resSeq          Residue sequence number. 
+27             AChar         iCode           Insertion code. 
+COLUMNS       DATA TYPE      FIELD         DEFINITION 
+ 1 - 6        Record name    "HETATM" 
+ 7 - 11       Integer        serial        Atom serial number. 
+13 - 16       Atom           name          Atom name. 
+17            Character      altLoc        Alternate location indicator. 
+18 - 20       Residue name   resName       Residue name. 
+22            Character      chainID       Chain identifier. 
+23 - 26       Integer        resSeq        Residue sequence number. 
+27            AChar          iCode         Code for insertion of residues. 
+31 - 38       Real(8.3)      x             Orthogonal coordinates for X. 
+39 - 46       Real(8.3)      y             Orthogonal coordinates for Y. 
+47 - 54       Real(8.3)      z             Orthogonal coordinates for Z. 
+55 - 60       Real(6.2)      occupancy     Occupancy. 
+61 - 66       Real(6.2)      tempFactor    Temperature factor. 
+77 - 78       LString(2)     element       Element symbol; right-justified. 
+79 - 80       LString(2)     charge        Charge on the atom. 
+COLUMNS        DATA TYPE     FIELD        DEFINITION 
+ 1 - 6         Record name   "ENDMDL" 
+COLUMNS       DATA TYPE      FIELD        DEFINITION 
+ 1 -  6       Record name    "CONECT" 
+ 7 - 11       Integer        serial       Atom serial number 
+12 - 16       Integer        serial       Serial number of bonded atom 
+17 - 21       Integer        serial       Serial number of bonded atom 
+22 - 26       Integer        serial       Serial number of bonded atom 
+27 - 31       Integer        serial       Serial number of bonded atom 
+COLUMNS        DATA TYPE     FIELD         DEFINITION 
+ 1 -  6        Record name   "MASTER" 
+11 - 15        Integer       numRemark     Number of REMARK records 
+16 - 20        Integer       "0" 
+21 - 25        Integer       numHet        Number of HET records 
+26 - 30        Integer       numHelix      Number of HELIX records 
+31 - 35        Integer       numSheet      Number of SHEET records 
+36 - 40        Integer       numTurn       deprecated 
+41 - 45        Integer       numSite       Number of SITE records 
+46 - 50        Integer       numXform      Number of coordinate transformation 
+51 - 55        Integer       numCoord      Number of atomic coordinate records 
+56 - 60        Integer       numTer        Number of TER records 
+61 - 65        Integer       numConect     Number of CONECT records 
+66 - 70        Integer       numSeq        Number of SEQRES records 
+COLUMNS       DATA TYPE     FIELD         DEFINITION 
+ 1 -  6       Record name   "END   " 

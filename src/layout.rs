@@ -69,6 +69,8 @@ pub struct Layout<T> {
     pub skip_field: String,
     /// Hash map of all read records from file
     pub rec_map: HashMap<String, Record<T>>,
+    /// Hash map of all field types found when reading
+    pub ftypes: HashMap<String, Rc<FieldDataType>>,
 }
 
 use xml::attribute::OwnedAttribute;
@@ -156,12 +158,23 @@ impl<T> Layout<T> {
                             };                            
                         }
                         "fieldtype" => {
+                            // mandatory XML attributes
                             let ft_name = attr.get("name").unwrap();
-                            let ft_type = attr.get("type").unwrap();                           
+                            let ft_type = attr.get("type").unwrap();   
+
+                            let mut ft =  FieldDataType::new(ft_name, ft_type);                       
+
+                            // optional XML attributes
+                            match attr.get("pattern") {
+                                Some(v) => ft.set_pattern(&v),
+                                None => (),
+                            }; 
+
+                            // finally insert field type
                             ftypes.insert(
                                 ft_name.to_string(), 
-                                Rc::new(FieldDataType::new(ft_name, ft_type))
-                            );
+                                Rc::new(ft)
+                            );                                                       
                         }                     
                         "record" => {
                             let rec_name = attr.get("name").unwrap();                            
@@ -191,8 +204,13 @@ impl<T> Layout<T> {
                             let f_desc = attr.get("description").unwrap();
 
                             // so is the field type
-                            let f_type = attr.get("type").unwrap().to_string();                                                       
-                            let ft = ftypes.get(&f_type).unwrap();
+                            let f_type = attr.get("type").unwrap().to_string(); 
+
+                            // try to get already insert field type                                                      
+                            let ft = match ftypes.get(&f_type) {
+                                Some(ft) => ft,
+                                None => panic!("No field type {} found!", f_type),
+                            };
 
                             // length could be present or Not
                             let f_length = match attr.get("length") {
@@ -204,13 +222,13 @@ impl<T> Layout<T> {
                             // be present
                             if f_length == 0 {
                                 // get lower offset
-                                let f_lower_offset = match attr.get("lower_offset") {
+                                let f_lower_offset = match attr.get("start") {
                                     Some(n) => n.parse::<usize>().unwrap(),
                                     None => 0,
                                 };  
                                     
                                 // get upper offset
-                                let f_upper_offset = match attr.get("upper_offset") {
+                                let f_upper_offset = match attr.get("end") {
                                     Some(n) => n.parse::<usize>().unwrap(),
                                     None => 0,
                                 };
@@ -252,33 +270,40 @@ impl<T> Layout<T> {
             schema: schema,
             ignore_line: ignore_line,
             skip_field: skip_field,
-            rec_map: rec_map
+            rec_map: rec_map,
+            ftypes: ftypes,
         }
     }
 
-    /// Returns the number of records in the layout
+    /// Returns the number of records in the layout.
     pub fn len(&self) -> usize {
         self.rec_map.len()
     }
 
-    /// Tests if Layout contains a record by giving its name
+    /// Tests if Layout contains a record by giving its name.
     pub fn contains_record(&self, recname: &str) -> bool {
         self.rec_map.contains_key(recname)
     } 
 
-    /// Tests if Layout contains a field record-wise
+    /// Tests if Layout contains a field record-wise.
     pub fn contains_field(&self, fname: &str) -> bool {
         self.rec_map.iter().any(|(_,v)| v.contains_field(fname))
     }    
 
-    /// Gets a record reference from its name
+    /// Gets a record reference from its name.
     pub fn get(&self, rec_name: &str) -> Option<&Record<T>> {
         self.rec_map.get(rec_name)
     }
-    /// Gets a mutable reference on record from its name    
+    
+    /// Gets a mutable reference on record from its name.   
     pub fn get_mut(&mut self, rec_name: &str) -> Option<&mut Record<T>> {
         self.rec_map.get_mut(rec_name)
     }
+
+    /// Gets a field type Rc.
+    pub fn get_type(&self, ftype_name: &str) -> Option<&Rc<FieldDataType>> {
+        self.ftypes.get(ftype_name)
+    }  
 
     /// Checks whether layout is valid: if `rec_length` is not 0, all records have the same length
     /// the sum of length all fields (i.e. record length) should match the `rec_length` value.
@@ -348,6 +373,13 @@ mod tests {
 
         // LL record has 27 fields
         assert_eq!(layout.get("LL").unwrap().count(), 27);
+
+        // gain access to deep field
+        let f = layout.get("LL").unwrap().get("ID").unwrap();
+        assert_eq!(f[0].ftype.pattern, "\\w+");
+
+        // same here
+        assert_eq!(layout.get_type("A").unwrap().pattern, "\\w+");
 
         // field F1 is present in layout, but no FOO
         assert!(layout.contains_field("W1"));

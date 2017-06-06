@@ -70,6 +70,8 @@ pub struct FieldDataType {
     pub id: String,
     /// Base type (which is only limited to a set a values)
     pub base_data_type: BaseDataType,
+    /// Optional pattern which describes field format
+    pub pattern: String,
 }
 
 impl FieldDataType {
@@ -96,7 +98,8 @@ impl FieldDataType {
         // according to string type, create corresponding type
         FieldDataType {
             id: id.to_string(), 
-            base_data_type: BaseDataType::from(string_type)
+            base_data_type: BaseDataType::from(string_type),
+            pattern: String::new(),
         }
     }
 
@@ -119,6 +122,10 @@ impl FieldDataType {
     pub fn set_time_format(&mut self, time_format: &str) {
         self.base_data_type = BaseDataType::Time { time_format : time_format.to_string() };
     } 
+
+    pub fn set_pattern(&mut self, pattern: &str) {
+        self.pattern = String::from(pattern);
+    }
 }
 
 

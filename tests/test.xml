@@ -7,7 +7,7 @@
 
     <meta version="2017" description="Test file"/>
 
-	<fieldtype name="A" type="string"/>
+	<fieldtype name="A" type="string" pattern="\w+"/>
 	<fieldtype name="N" type="decimal"/>    
 
 	<record name="LL" description="First record: latin Words" length="353">
