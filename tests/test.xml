@@ -5,7 +5,7 @@
     xsi:schemaLocation="http://www.w3schools.com rbf.xsd"
 >
 
-    <meta version="2017" description="Test file"/>
+    <meta version="2017" description="Test file" ignoreLine="^A" skipField="W1,N1"/>
 
 	<fieldtype name="A" type="string" pattern="\w+"/>
 	<fieldtype name="N" type="decimal"/>    

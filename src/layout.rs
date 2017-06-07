@@ -32,10 +32,11 @@ use std::env;
 use std::fs::File;
 use std::error::Error;
 use std::io::BufReader;
-use std::collections::HashMap;
 use std::rc::Rc;
+use std::collections::HashMap;
 
 use xml::reader::{EventReader, XmlEvent};
+use regex::Regex;
 
 use fieldtype::FieldDataType;
 use field::Field;
@@ -64,7 +65,7 @@ pub struct Layout<T> {
     /// SQL schema name (future use)
     pub schema: String,
     /// Regex for lines to exclude from reading
-    pub ignore_line: String,
+    pub ignore_line: Regex,
     /// List of field names to always skip when reading
     pub skip_field: String,
     /// Hash map of all read records from file
@@ -118,7 +119,7 @@ impl<T> Layout<T> {
         let mut version = String::new();
         let mut description = String::new();
         let mut schema = String::new();
-        let mut ignore_line = String::new();
+        let mut ignore_line = Regex::new("").unwrap();
         let mut skip_field = String::new();       
 
         // loop through elements
@@ -149,8 +150,8 @@ impl<T> Layout<T> {
                                 None => String::from(""),
                             };                                                                                   
                             ignore_line = match attr.get("ignoreLine") {
-                                Some(v) => v.to_string(),
-                                None => String::from(""),
+                                Some(v) => Regex::new(&v.to_string()).unwrap(),
+                                None => Regex::new("").unwrap(),
                             };
                             skip_field = match attr.get("skipField") {
                                 Some(v) => v.to_string(),
@@ -260,7 +261,7 @@ impl<T> Layout<T> {
                 }
                 _ => {}
             }
-        }        
+        }      
 
         Layout {
             xml_file: xml_file.to_string(),
@@ -273,6 +274,17 @@ impl<T> Layout<T> {
             rec_map: rec_map,
             ftypes: ftypes,
         }
+    }
+
+    pub fn from_xml(xml_file: &str) -> Layout<T> {
+        let mut layout = Layout::new(xml_file);
+        let skip_field = layout.skip_field.clone();
+
+        if layout.skip_field != "" {
+            layout.set_skip_field(&skip_field);
+        }  
+
+        layout       
     }
 
     /// Returns the number of records in the layout.
@@ -305,6 +317,32 @@ impl<T> Layout<T> {
         self.ftypes.get(ftype_name)
     }  
 
+    /// Removes each field from the list from the whole layout, i.e. from all records.
+    /// If a field name doesn't exist, no error is returned and the deletion is ignored.
+    pub fn remove(&mut self, flist: Vec<&str>) {
+        for (_, rec) in &mut self.rec_map {
+            rec.remove(|f| flist.contains(&&*f.name));
+        }
+    }
+
+/*    /// Retains only the records and list specified. All other records or fields are removed.
+    pub fn retain(&mut self, rec_list: HashMap<&str, Vec<&str>>) {
+        // create vector of record names to retain only those ones.
+        let rec_names: Vec<_> = rec_list.keys().collect();
+        //self.rec_map.retain(|&k, _| rec_names.contains(k));
+
+        // now for each remainig record, delete fields
+        for (rec_name, rec) in &mut self.rec_map {
+            if rec_names.contains(&&&**rec_name) {
+                rec.retain(|f| rec_list.get(&**rec_name).unwrap().contains(&&*f.name));
+            }
+            else {
+                self.rec_map.remove(&**rec_name);
+            }
+        }
+
+    }*/    
+
     /// Checks whether layout is valid: if `rec_length` is not 0, all records have the same length
     /// the sum of length all fields (i.e. record length) should match the `rec_length` value.
     /// If not, each record length should match the declared length
@@ -324,6 +362,15 @@ impl<T> Layout<T> {
             }            
         }
         (true, "", 0, 0)
+    }
+
+    /// Sets skil field.
+    pub fn set_skip_field(&mut self, skip_field: &str) {
+        // save value and delete all fields in the list from layout
+        self.skip_field = String::from(skip_field);
+
+        // remove field names
+        self.remove(::layout::utility::into_field_list(skip_field));
     }
            
 
@@ -351,6 +398,42 @@ pub mod setup {
         Layout::<AsciiMode>::new("./tests/test.xml")
     }  
 
+}
+
+mod utility {
+    /// Converts a comma-separated string into a vector of trimmed string refs.
+    pub fn into_field_list(s: &str) -> Vec<&str> {
+        let flist: Vec<_> = s.split(',').map(|f| f.trim()).collect();
+        flist
+    }
+
+    /// Converts a comma-separated string into a vector of trimmed string refs.
+    use std::collections::HashMap;    
+
+    pub fn into_rec_map(s: &str) -> HashMap<&str, Vec<&str>> {
+        let mut rec_map: HashMap<&str, Vec<&str>> = HashMap::new();
+
+        for list in s.split(";") {
+            let v: Vec<_> = list.split(":").map(|f| f.trim()).collect();
+            rec_map.insert(v[0], into_field_list(v[1]));
+        }
+
+        rec_map
+    } 
+
+    #[test]
+    fn layout_utility() {
+        let mut s = into_field_list("AA, BB, CC, DD  ");
+        assert_eq!(s, vec!("AA","BB","CC","DD"));
+
+        s = into_field_list("AA ");
+        assert_eq!(s, vec!("AA"));
+        
+        let v = into_rec_map("F1:AA,  BB, CC ; F2: DD, EE, FF   ; F3: GG, HH  ");
+        assert_eq!(v.get("F1").unwrap(), &vec!("AA","BB","CC"));
+        assert_eq!(v.get("F2").unwrap(), &vec!("DD","EE","FF"));
+        assert_eq!(v.get("F3").unwrap(), &vec!("GG","HH"));
+    }       
 }
 
 #[cfg(test)]
@@ -385,12 +468,62 @@ mod tests {
         assert!(layout.contains_field("W1"));
         assert!(!layout.contains_field("FOO")); 
 
+        // ignore line regex
+        assert_eq!(layout.ignore_line.as_str(), "^A");
+
         // loop
         for (recname, rec) in &layout {
             assert!(recname.len() >= 2);
             assert!(rec.name.len() <= 3);        
         }        
     }
+
+    #[test]
+    fn layout_remove() {
+        // load our layout
+        let mut layout = ::layout::setup::layout_load_layout_ascii();
+        assert_eq!(layout.contains_field("ID"), true);   
+
+        // remove all "ID" fields from all records
+        layout.remove(vec!("ID"));
+        assert_eq!(layout.contains_field("ID"), false);
+
+         // remove a list
+        layout.remove(vec!("W26","N9","G24"));
+        assert_eq!(layout.contains_field("ID"), false);
+
+        assert_eq!(layout.get("LL").unwrap().count(), 25);
+        assert_eq!(layout.get("NB").unwrap().count(), 8);
+        assert_eq!(layout.get("GL").unwrap().count(), 23);           
+    }
+
+    #[test]
+    fn layout_skip_field() {
+        // load our layout
+        let mut layout = ::layout::setup::layout_load_layout_ascii();
+
+        layout.set_skip_field("ID , W26,    N9 ,   G24 ");
+
+        assert_eq!(layout.contains_field("ID"), false);
+        assert_eq!(layout.get("LL").unwrap().count(), 25);
+        assert_eq!(layout.get("NB").unwrap().count(), 8);
+        assert_eq!(layout.get("GL").unwrap().count(), 23);           
+    } 
+/*
+    #[test]
+    fn layout_retain() {
+        // load our layout
+        use std::collections::HashMap;
+        let mut layout = ::layout::setup::layout_load_layout_ascii();
+
+        let mut rec_list: HashMap<&str, Vec<&str>> = HashMap::new();
+        rec_list.insert("LL", vec!("ID","W26"));
+        rec_list.insert("NB", vec!("N7","N8"));
+
+        layout.retain(rec_list);
+           
+    }  */      
+    
 
 /*    #[bench]
     fn bench_load_layout(b: &mut Bencher) {

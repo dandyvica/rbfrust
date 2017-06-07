@@ -131,6 +131,7 @@
 //! }
 //! ```
 extern crate xml;
+extern crate regex;
 
 pub mod fieldtype;
 pub mod field;

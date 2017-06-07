@@ -161,7 +161,8 @@ impl<T> Record<T> {
     /// # Panics
     /// If `name` is empty
     pub fn new(name: &str, description: &str, length: usize) -> Record<T> {
-        // first test arguments: non-sense to deal with empty data
+        // first test arguments: non-sense to deal with empty name
+        // but description could be empty.
         if name.is_empty() {
             panic!("Cannot create Record with an empty name!");
         }
@@ -282,7 +283,7 @@ impl<T> Record<T> {
             None => panic!("Key {} not found in record {}", fname, self.name),
         };
 
-        // safely returns valuechar_at
+        // safely returns value
         fields[0].value()
     } 
 
@@ -405,6 +406,13 @@ impl<T> Clone for Record<T> {
         }                                        
 
         cloned
+    }
+}
+
+/// Convenient conversion from a tuple.
+impl<'a, T> From<(&'a str, &'a str, usize)> for Record<T> {
+    fn from(vals: (&'a str, &'a str, usize)) -> Record<T> {
+        Record::new(vals.0, vals.1, vals.2)
     }
 }
 
