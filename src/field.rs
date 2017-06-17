@@ -181,7 +181,12 @@ impl Field {
     /// Returns the total number of chars in the fields.
     pub fn len(&self) -> usize {
         self.length
-    }  
+    }
+
+    /// Verifies if the field value is matching the field type pattern.
+    pub fn is_match(&self) -> bool {
+        self.ftype.pattern.is_match(&self.raw_value)
+    }
 
     /// Prints out field data as an HTML table row (useful for debugging).
     pub fn as_html(&self) {
@@ -237,6 +242,20 @@ mod tests {
         assert_eq!(other_f.value(), "XX");
 
     }
+
+    #[test]
+    fn field_pattern() {
+        let mut ft = FieldDataType::new("I", "integer");
+        ft.set_pattern("\\d+");
+
+        let mut f1 = Field::from_offset("F1", "Description for field 1", &Rc::new(ft), 5, 10); 
+        f1.set_value("123");  
+        assert!(f1.is_match());
+
+        f1.set_value("ABC");  
+        assert!(!f1.is_match());        
+
+    }    
 
     #[test]
     fn field_cons_offset() {

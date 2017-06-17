@@ -459,10 +459,10 @@ mod tests {
 
         // gain access to deep field
         let f = layout.get("LL").unwrap().get("ID").unwrap();
-        assert_eq!(f[0].ftype.pattern, "\\w+");
+        assert_eq!(f[0].ftype.pattern.as_str(), "\\w+");
 
         // same here
-        assert_eq!(layout.get_type("A").unwrap().pattern, "\\w+");
+        assert_eq!(layout.get_type("A").unwrap().pattern.as_str(), "\\w+");
 
         // field F1 is present in layout, but no FOO
         assert!(layout.contains_field("W1"));

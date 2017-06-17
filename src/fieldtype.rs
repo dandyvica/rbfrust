@@ -20,6 +20,7 @@
 //! ```
 
 use std::fmt;
+use regex::Regex;
 
 /// List all possible field types when built from a string
 const POSSIBLE_TYPES: [&str; 5] = ["string", "decimal", "integer", "date", "time"];
@@ -71,7 +72,7 @@ pub struct FieldDataType {
     /// Base type (which is only limited to a set a values)
     pub base_data_type: BaseDataType,
     /// Optional pattern which describes field format
-    pub pattern: String,
+    pub pattern: Regex,
 }
 
 impl FieldDataType {
@@ -99,7 +100,7 @@ impl FieldDataType {
         FieldDataType {
             id: id.to_string(), 
             base_data_type: BaseDataType::from(string_type),
-            pattern: String::new(),
+            pattern: Regex::new("").unwrap(),
         }
     }
 
@@ -123,8 +124,14 @@ impl FieldDataType {
         self.base_data_type = BaseDataType::Time { time_format : time_format.to_string() };
     } 
 
+    /// Sets the regex pattern for the field type.
+    ///
+    /// # Arguments
+    ///
+    /// * `pattern` - string regex
+    /// 
     pub fn set_pattern(&mut self, pattern: &str) {
-        self.pattern = String::from(pattern);
+        self.pattern = Regex::new(pattern).unwrap();
     }
 }
 
