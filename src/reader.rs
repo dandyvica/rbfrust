@@ -77,7 +77,7 @@ pub enum ReaderLazyness {
 
 
 // function type to get the record ID from the whole line read from the target file
-type RecordMapper = fn(&str) -> &str;
+pub type RecordMapper = fn(&str) -> &str;
 
 pub struct Reader<T> {
     /// record-based file to read
@@ -139,46 +139,6 @@ impl<T> Reader<T> {
             chars_read: 0,
             nblines_read: 0,
         }
-    }
-
-    pub fn next_record_id(&mut self) -> Option<String> {
-        // record ID from line
-        let mut rec_id: String;
-
-        // try to get a record ID
-        loop {
-            // clear buffer, otherwise buffer is growing  
-            self.line.clear();            
-
-            // read one line of text
-            match self.bufreader.read_line(&mut self.line) {
-                // No bytes read? This is EOF and we must end the iteration
-                Ok(chars_read) => if chars_read == 0 { 
-                        return None; 
-                    } else { 
-                        self.chars_read = chars_read;
-                        self.nblines_read += 1; 
-                    },
-                // error reading bytes
-                Err(why) => panic!("error {} when reading file {}", why.description(), self.rbf_file),
-            }; 
-
-            // get the record ID using mapper
-            rec_id = (self.mapper)(&self.line).to_owned();
-
-            // record ID could not exist
-            match self.layout.contains_record(&rec_id) {
-                true => break,
-                false => if self.lazyness == ReaderLazyness::Stringent {
-                                panic!("couldn't find record ID {} in file {}", rec_id, self.rbf_file);
-                        } 
-                        else {
-                                continue;
-                        }
-            };
-        } 
-
-        Some(rec_id)
     }
 
     /// Returns a mutable reference on the record corresponding to the line read. **next()** returns **None**

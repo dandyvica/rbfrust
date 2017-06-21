@@ -139,3 +139,4 @@ pub mod field;
 pub mod record;
 pub mod layout;
 pub mod reader;
+pub mod util;

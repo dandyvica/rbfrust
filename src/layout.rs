@@ -41,6 +41,8 @@ use regex::Regex;
 use fieldtype::FieldDataType;
 use field::Field;
 use record::Record;
+use reader::RecordMapper;
+use util::into_field_list;
 
 // useful macro to get value from attribute name
 #[doc(hidden)]
@@ -52,7 +54,7 @@ macro_rules! get_value {
 }
 
 
-#[derive(Debug)]
+//#[derive(Debug)]
 pub struct Layout<T> {
     /// XML layout file name
     pub xml_file: String,
@@ -72,6 +74,8 @@ pub struct Layout<T> {
     pub rec_map: HashMap<String, Record<T>>,
     /// Hash map of all field types found when reading
     pub ftypes: HashMap<String, Rc<FieldDataType>>,
+    /// Fn which maps each line to a record ID
+    pub mapper: RecordMapper,
 }
 
 use xml::attribute::OwnedAttribute;
@@ -85,6 +89,9 @@ fn as_hash(attributes: &Vec<OwnedAttribute>) -> HashMap<&str, &str>
     }
     h
 }
+
+/// identity function
+fn identity(x: &str) -> &str { x }
 
 impl<T> Layout<T> {
     /// Reads the XML layout file to create record and field structs.
@@ -263,28 +270,25 @@ impl<T> Layout<T> {
             }
         }      
 
-        Layout {
+        let mut layout = Layout {
             xml_file: xml_file.to_string(),
             rec_length: rec_length,    
             version: version,
             description: description,
             schema: schema,
             ignore_line: ignore_line,
-            skip_field: skip_field,
+            skip_field: String::new(),
             rec_map: rec_map,
             ftypes: ftypes,
-        }
-    }
+            mapper: identity,
+        };
 
-    pub fn from_xml(xml_file: &str) -> Layout<T> {
-        let mut layout = Layout::new(xml_file);
-        let skip_field = layout.skip_field.clone();
-
-        if layout.skip_field != "" {
+        // set skip field if any
+        if skip_field != "" {
             layout.set_skip_field(&skip_field);
-        }  
+        }         
 
-        layout       
+        layout
     }
 
     /// Returns the number of records in the layout.
@@ -370,7 +374,7 @@ impl<T> Layout<T> {
         self.skip_field = String::from(skip_field);
 
         // remove field names
-        self.remove(::layout::utility::into_field_list(skip_field));
+        self.remove(into_field_list(skip_field));
     }
            
 
@@ -398,42 +402,6 @@ pub mod setup {
         Layout::<AsciiMode>::new("./tests/test.xml")
     }  
 
-}
-
-mod utility {
-    /// Converts a comma-separated string into a vector of trimmed string refs.
-    pub fn into_field_list(s: &str) -> Vec<&str> {
-        let flist: Vec<_> = s.split(',').map(|f| f.trim()).collect();
-        flist
-    }
-
-    /// Converts a comma-separated string into a vector of trimmed string refs.
-    use std::collections::HashMap;    
-
-    pub fn into_rec_map(s: &str) -> HashMap<&str, Vec<&str>> {
-        let mut rec_map: HashMap<&str, Vec<&str>> = HashMap::new();
-
-        for list in s.split(";") {
-            let v: Vec<_> = list.split(":").map(|f| f.trim()).collect();
-            rec_map.insert(v[0], into_field_list(v[1]));
-        }
-
-        rec_map
-    } 
-
-    #[test]
-    fn layout_utility() {
-        let mut s = into_field_list("AA, BB, CC, DD  ");
-        assert_eq!(s, vec!("AA","BB","CC","DD"));
-
-        s = into_field_list("AA ");
-        assert_eq!(s, vec!("AA"));
-        
-        let v = into_rec_map("F1:AA,  BB, CC ; F2: DD, EE, FF   ; F3: GG, HH  ");
-        assert_eq!(v.get("F1").unwrap(), &vec!("AA","BB","CC"));
-        assert_eq!(v.get("F2").unwrap(), &vec!("DD","EE","FF"));
-        assert_eq!(v.get("F3").unwrap(), &vec!("GG","HH"));
-    }       
 }
 
 #[cfg(test)]
