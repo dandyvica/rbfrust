@@ -21,7 +21,7 @@ fn main () {
     let layout = Layout::<AsciiMode>::new(&args[1]);
 
     // create reader
-    fn mapper(x: &str) -> &str { &x[0..2] };
+    let mapper = Box::new(|x: &str| x[0..2].to_string());
     let mut reader = Reader::new(&args[2], layout, mapper);  
 
     // loop through records

@@ -133,7 +133,8 @@ fn reader_stringent() {
     let layout = Layout::<AsciiMode>::new("./tests/test.xml");
 
     // create reader
-    fn mapper(x: &str) -> &str { &x[0..2] };
+    let mapper = Box::new(|x: &str| x[0..2].to_string());
+    //fn mapper(x: &str) -> &str { &x[0..2] };
     let mut reader = Reader::<AsciiMode>::new("./tests/test_ascii.data", layout, mapper);
 
     // set stringent mode
@@ -151,7 +152,7 @@ fn reader_lazy() {
     let layout = Layout::<UTF8Mode>::new("./tests/test.xml");
 
     // create reader
-    fn mapper(x: &str) -> &str { &x[0..2] };
+    let mapper = Box::new(|x: &str| x[0..2].to_string());
     let mut reader = Reader::<UTF8Mode>::new("./tests/test_utf8.data", layout, mapper);
 
     // useful vars

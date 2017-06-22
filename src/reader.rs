@@ -11,7 +11,7 @@
 //!    let layout = Layout::<UTF8Mode>::new("./tests/test.xml");
 //!
 //!    // create reader
-//!    fn mapper(x: &str) -> &str { &x[0..2] };
+//!    let mapper = Box::new(|x: &str| x[0..2].to_string());
 //!    let mut reader = Reader::<UTF8Mode>::new("./tests/test_utf8.data", layout, mapper);
 //!
 //!    // useful vars
@@ -65,6 +65,7 @@ use std::fs::File;
 
 use record::{ReadMode, Record};
 use layout::Layout;
+use mapper::RecordHasher;
 
 /// This enum defines whether we should stop reading when an unknown record ID is found
 #[derive(PartialEq)]
@@ -77,7 +78,7 @@ pub enum ReaderLazyness {
 
 
 // function type to get the record ID from the whole line read from the target file
-pub type RecordMapper = fn(&str) -> &str;
+//pub type RecordMapper = fn(&str) -> &str;
 
 pub struct Reader<T> {
     /// record-based file to read
@@ -85,7 +86,7 @@ pub struct Reader<T> {
     /// layout struct describing the file to read
     pub layout: Layout<T>,
     /// function to map each line to a record name
-    pub mapper: RecordMapper,
+    pub mapper: RecordHasher,
     /// buffer use when reading the file line by line
     bufreader: BufReader<File>,
     /// the line read from file
@@ -111,7 +112,7 @@ impl<T> Reader<T> {
     ///
     /// # Panics
     /// If `rbf_file` could not be read
-    pub fn new(rbf_file: &str, layout: Layout<T>, mapper: RecordMapper) -> Reader<T>
+    pub fn new(rbf_file: &str, layout: Layout<T>, mapper: RecordHasher) -> Reader<T>
     {
         // open file for reading
         let bufreader = match File::open(&rbf_file) {
@@ -178,7 +179,7 @@ impl<T> Reader<T> {
             }; 
 
             // get the record ID using mapper
-            rec_id = (self.mapper)(&self.line).to_owned();
+            rec_id = (self.mapper)(&self.line);
 
             // record ID could not exist
             match self.layout.contains_record(&rec_id) {

@@ -106,7 +106,7 @@
 //!     let layout = Layout::<AsciiMode>::new("./tests/test.xml");
 //! 
 //!     // create reader
-//!     fn mapper(x: &str) -> &str { &x[0..2] };
+//!     let mapper = Box::new(|x: &str| x[0..2].to_string());
 //!     let mut reader = Reader::<AsciiMode>::new("./tests/test_ascii.data", layout, mapper);  
 //! 
 //!     // loop through records
@@ -140,3 +140,4 @@ pub mod record;
 pub mod layout;
 pub mod reader;
 pub mod util;
+pub mod mapper;

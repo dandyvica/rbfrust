@@ -320,6 +320,31 @@ impl<T> Record<T> {
             Cow::Borrowed(value)
         }
     }
+
+    /// Converts a record to an HTML table with all fields data.
+    pub fn to_html(&self) -> String {
+        let mut s = String::with_capacity(200*self.count());
+
+		// record description
+		s += format!("<h2><span class=\"label label-primary\">{}-{}-{}</span></h2>",
+			self.name, self.description, self.calculated_length).as_str();
+
+		// fields description
+		s += format!("<table class=\"table table-striped\">").as_str();
+		s += format!("<thead><tr><th>#</th><th>Field name</th><th>Description</th>").as_str();
+		s += format!("<th>Type</th><th>Length</th><th>Start</th><th>End</th></tr></thead>").as_str();        
+
+        for f in self {
+            s += format!("<tr><td>{}</td><td><strong>{}</strong></td>", f.index, &f.name).as_str();
+            s += format!("<td>{}</td><td>{}</td><td>{}</td>", &f.description, f.ftype.id, f.length).as_str();
+            s += format!("<td>{}</td><td>{}</td></tr>", f.lower_offset+1, f.upper_offset+1).as_str();         
+        }
+
+        // close HTML table
+        s += format!("</table>").as_str();
+
+        s
+    }
 }
 
 /// Lists all field name and values from a Record.

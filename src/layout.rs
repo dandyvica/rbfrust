@@ -41,7 +41,7 @@ use regex::Regex;
 use fieldtype::FieldDataType;
 use field::Field;
 use record::Record;
-use reader::RecordMapper;
+use mapper::{RecordHasher, RecordMapper};
 use util::into_field_list;
 
 // useful macro to get value from attribute name
@@ -74,8 +74,8 @@ pub struct Layout<T> {
     pub rec_map: HashMap<String, Record<T>>,
     /// Hash map of all field types found when reading
     pub ftypes: HashMap<String, Rc<FieldDataType>>,
-    /// Fn which maps each line to a record ID
-    pub mapper: RecordMapper,
+    // closure which maps each line to a record ID
+    pub mapper: RecordHasher,
 }
 
 use xml::attribute::OwnedAttribute;
@@ -89,9 +89,6 @@ fn as_hash(attributes: &Vec<OwnedAttribute>) -> HashMap<&str, &str>
     }
     h
 }
-
-/// identity function
-fn identity(x: &str) -> &str { x }
 
 impl<T> Layout<T> {
     /// Reads the XML layout file to create record and field structs.
@@ -127,7 +124,8 @@ impl<T> Layout<T> {
         let mut description = String::new();
         let mut schema = String::new();
         let mut ignore_line = Regex::new("").unwrap();
-        let mut skip_field = String::new();       
+        let mut skip_field = String::new();  
+        let mut mapper_pattern = String::new();    
 
         // loop through elements
         let parser = EventReader::new(file);
@@ -163,7 +161,11 @@ impl<T> Layout<T> {
                             skip_field = match attr.get("skipField") {
                                 Some(v) => v.to_string(),
                                 None => String::from(""),
-                            };                            
+                            }; 
+                            mapper_pattern = match attr.get("mapper") {
+                                Some(v) => v.to_string(),
+                                None => String::from(""),
+                            };                                                       
                         }
                         "fieldtype" => {
                             // mandatory XML attributes
@@ -280,13 +282,18 @@ impl<T> Layout<T> {
             skip_field: String::new(),
             rec_map: rec_map,
             ftypes: ftypes,
-            mapper: identity,
+            mapper: RecordMapper::default().hasher,
         };
 
         // set skip field if any
         if skip_field != "" {
             layout.set_skip_field(&skip_field);
-        }         
+        }
+
+        // set mapper closure if any
+        if mapper_pattern != "" {
+            layout.mapper = RecordMapper::from(mapper_pattern.as_ref()).hasher;
+        }                  
 
         layout
     }
@@ -329,23 +336,20 @@ impl<T> Layout<T> {
         }
     }
 
-/*    /// Retains only the records and list specified. All other records or fields are removed.
+    /// Retains only the records and list specified. All other records or fields are removed.
     pub fn retain(&mut self, rec_list: HashMap<&str, Vec<&str>>) {
         // create vector of record names to retain only those ones.
         let rec_names: Vec<_> = rec_list.keys().collect();
-        //self.rec_map.retain(|&k, _| rec_names.contains(k));
+        self.rec_map.retain(|ref k, _| rec_names.contains(&&&***k));
 
-        // now for each remainig record, delete fields
+        // now for each remaining record, delete given fields
         for (rec_name, rec) in &mut self.rec_map {
             if rec_names.contains(&&&**rec_name) {
                 rec.retain(|f| rec_list.get(&**rec_name).unwrap().contains(&&*f.name));
             }
-            else {
-                self.rec_map.remove(&**rec_name);
-            }
         }
 
-    }*/    
+    }  
 
     /// Checks whether layout is valid: if `rec_length` is not 0, all records have the same length
     /// the sum of length all fields (i.e. record length) should match the `rec_length` value.
@@ -368,7 +372,7 @@ impl<T> Layout<T> {
         (true, "", 0, 0)
     }
 
-    /// Sets skil field.
+    /// Sets skip field.
     pub fn set_skip_field(&mut self, skip_field: &str) {
         // save value and delete all fields in the list from layout
         self.skip_field = String::from(skip_field);
@@ -464,6 +468,24 @@ mod tests {
         assert_eq!(layout.get("NB").unwrap().count(), 8);
         assert_eq!(layout.get("GL").unwrap().count(), 23);           
     }
+
+    #[test]
+    fn layout_retain() {
+        // load our layout
+        let mut layout = ::layout::setup::layout_load_layout_ascii();
+
+        // build list of rec/fields to retain
+        use util::into_rec_map;
+        let v = into_rec_map("LL:ID; NB:ID,N2");
+
+        // prune records and fields
+        layout.retain(v);
+
+        assert_eq!(layout.get("LL").unwrap().count(), 1);
+        assert_eq!(layout.get("NB").unwrap().count(), 2);
+        assert_eq!(layout.contains_record("GL"), false);
+
+    }    
 
     #[test]
     fn layout_skip_field() {

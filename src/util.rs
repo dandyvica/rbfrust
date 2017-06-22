@@ -1,6 +1,4 @@
 use std::collections::HashMap;
-use regex::Regex;  
-
 
 /// Converts a comma-separated string into a vector of trimmed string refs.
 /// # Example
@@ -37,48 +35,3 @@ pub fn into_rec_map(s: &str) -> HashMap<&str, Vec<&str>> {
     rec_map
 } 
 
-/// Convenient conversion from a string ref.
-type RecordHasher = Fn(&str) -> String;
-
-struct ClosureEnv {
-    constant: String,
-    range: (usize,usize),
-    dual_range: (usize,usize,usize,usize),
-}
-
-struct RecordMapper {
-    hasher: Box<RecordHasher>,
-    env: ClosureEnv,
-    orig: String,
-}
-
-/*impl<'a> From<&'a str> for RecordMapper {
-    fn from(original: &'a str) -> RecordMapper {
-        let mapperReg = Regex::new(r"^type:(?P<h_type>\d)\s+map:\s*(?P<h_value>[\w\.,]+)\s*$").unwrap();
-        let caps = mapperReg.captures(original).unwrap();
-
-        match caps["h_type"].parse::<usize>().unwrap() {
-            0 => {
-                let mut r = RecordMapper{ 
-                    hasher: Box::new(|x: &str| x.to_string()),
-                    env: ClosureEnv{ constant: caps["h_value"].to_string(), range:(0,0), dual_range: (0,0,0,0) },
-                    orig: original.to_owned(),
-                };
-
-                r.hasher = Box::new(move |x: &str| r.env.constant);
-                r
-            },
-            _ => panic!("Unknown mapper pattern {}", original),
-        }
-    }
-}*/
-
-/*pub fn into_hasher(s: &str) -> Box<RecordHash> {
-    Box::new(|x: &str| String::from(&x[0..2]))
-}*/
-
-
-#[cfg(test)]
-mod tests {
-      
-}
